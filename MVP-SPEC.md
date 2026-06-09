@@ -59,7 +59,7 @@ app.nakespro.id (App — repo ini)
 **Catatan:**
 - Tagihan bulanan: Rp39.000 + order ID (misal Rp39.015)
 - Tagihan tahunan: Rp300.000 + order ID (misal Rp300.021)
-- Telat bayar: website suspended sementara
+- Telat bayar: website dinonaktifkan sementara (bisa diaktifkan lagi setelah bayar)
 
 ---
 
@@ -242,7 +242,7 @@ model OrderPhoto {
 | 2 | Billing | Bulanan (Rp39rb) atau Tahunan (Rp300rb) |
 | 3 | Payment | QRIS manual + unique amount, confirm manual Salman |
 | 4 | Renewal | QRIS manual tiap periode (bulanan/tahunan) |
-| 5 | Telat bayar | Website suspended sementara |
+| 5 | Telat bayar | Website dinonaktifkan sementara (bisa diaktifkan lagi setelah bayar) |
 | 6 | Form submission | GAK GATE — submit kapan aja |
 | 7 | File storage | Local filesystem (MVP) |
 

@@ -128,7 +128,7 @@ Untuk detail teknis & arsitektur, lihat **MVP-SPEC.md** di repo ini.
 | 2 | Billing | Bulanan (Rp39rb) atau Tahunan (Rp300rb) |
 | 3 | Payment | QRIS Manual — Salman confirm via admin |
 | 4 | Renewal | QRIS manual tiap periode |
-| 5 | Telat bayar | Website suspended sementara |
+| 5 | Telat bayar | Website dinonaktifkan sementara (bisa diaktifkan lagi setelah bayar) |
 | 6 | Form submission | GAK GATE — submit kapan aja |
 | 7 | Notifikasi | WA redirect link (gratis, MVP) |
 | 8 | File storage | Local filesystem (MVP), S3/R2 later |
