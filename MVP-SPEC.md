@@ -147,6 +147,66 @@ Client pilih satu dari 4 template setelah register (sebelum bayar). Semua templa
 
 ---
 
+## 4.2 Subdomain Provisioning
+
+Subdomain `{nama}.nakespro.id` punya dua tahap: **reservasi nama** (otomatis saat client isi form) dan **go-live aktual** (saat Salman selesai build).
+
+**Tahap 1 — Reservasi nama (otomatis):**
+```
+1. Saat isi form, client ketik nama subdomain (mis. "kliniksehat")
+2. Sistem validasi real-time:
+   - Format: lowercase, alfanumerik + tanda hubung, 3-30 karakter
+   - Belum dipakai order lain (cek unik di tabel Order.subdomain)
+   - Bukan reserved word (www, app, api, admin, mail, dll)
+3. Valid → simpan ke Order.subdomain, set websiteUrl = https://{nama}.nakespro.id
+4. Tampilkan preview: "Website kamu akan live di kliniksehat.nakespro.id"
+```
+
+**Tahap 2 — Go-live (saat build selesai):**
+```
+5. Salman selesai build website (manual/vibe coding)
+6. Deploy ke Easypanel dengan host {nama}.nakespro.id
+7. Set buildStatus = "done", isActive = true
+8. Website live di subdomain
+```
+
+**Catatan teknis (DNS wildcard):**
+- Set wildcard DNS `*.nakespro.id → VPS 96.9.231.66` di Cloudflare SEKALI
+- Tiap subdomain baru otomatis resolve ke VPS tanpa nambah DNS record manual
+- Easypanel yang handle routing per-subdomain ke service website client
+- **Reservasi nama otomatis di app, tapi deploy aktual tetap manual oleh Salman** (konsisten dengan MVP build manual)
+
+**Field di Order:**
+- `subdomain` → nama yang direservasi (unik, validated)
+- `websiteUrl` → full URL, di-set saat reservasi (https://{nama}.nakespro.id)
+- `isActive` → false sampai Salman deploy & publish
+
+---
+
+## 4.3 Notifikasi Admin (WA/Telegram)
+
+Salman dapat notifikasi otomatis saat ada event penting, biar gak perlu cek admin panel terus-terusan.
+
+**Event yang trigger notifikasi:**
+| Event | Isi notifikasi |
+|---|---|
+| Order baru dibuat | Nama client, paket, template pilihan |
+| Client klaim sudah bayar | Order ID, jumlah (unique amount), link ke admin order |
+| Form di-submit | Nama client, nama website, jumlah foto |
+| Order jatuh tempo (renewal) | Nama client, website, jumlah tagihan |
+
+**Pilihan channel:**
+- **Telegram Bot** (rekomendasi MVP): gratis, API simpel, gampang setup. Bikin bot via @BotFather → kirim pesan ke chat Salman via Bot API
+- **WhatsApp**: butuh WA Business API (berbayar/approval) atau unofficial lib (rawan ban). Skip untuk MVP
+
+**Implementasi (Telegram):**
+- Env var `TELEGRAM_BOT_TOKEN` + `TELEGRAM_ADMIN_CHAT_ID`
+- Helper `notifyAdmin(message)` → POST ke `https://api.telegram.org/bot{token}/sendMessage`
+- Dipanggil di server action / route handler saat event terjadi
+- Notifikasi ke CLIENT (mis. "website kamu sudah live") tetap manual via WA Salman untuk MVP
+
+---
+
 ## 5. Halaman & Routes (app.nakespro.id)
 
 | Route | Akses | Fungsi |
@@ -406,6 +466,8 @@ Stepper visual horizontal/vertical yang nunjukin posisi order sekarang:
 | 10 | Admin auth | Email whitelist via env `ADMIN_EMAILS`, dicek di middleware. Tanpa role system |
 | 11 | Renewal reminder | Cron harian flag order jatuh tempo di admin panel; Salman kirim WA manual. Grace period 7 hari sebelum suspend |
 | 12 | Build status | Client lihat progress via stepper di dashboard. 5 status: awaiting_payment → payment_confirmed → designing → review → done. Transisi manual oleh Salman (kecuali awaiting_payment) |
+| 13 | Subdomain | Reservasi nama otomatis saat isi form (validasi unik + reserved word). Deploy aktual manual oleh Salman. DNS wildcard `*.nakespro.id` |
+| 14 | Notifikasi admin | Otomatis via Telegram Bot (gratis, simpel). WA skip untuk MVP. Notif ke client tetap manual |
 
 ---
 
