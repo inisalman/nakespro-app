@@ -133,6 +133,23 @@ Client pilih satu dari 4 template setelah register (sebelum bayar). Semua templa
 | `/admin` | Salman | List orders, confirm payment, update status |
 | `/admin/orders/[id]` | Salman | Detail order + admin notes |
 
+### 5.1 Admin Auth — Email Whitelist
+
+Akses `/admin/*` dibatasi via **email whitelist** (cocok untuk MVP, tanpa role system).
+
+```
+1. Admin login pakai Google OAuth (sama seperti client biasa)
+2. Middleware /admin/* cek: session.user.email ∈ ADMIN_EMAILS
+3. Kalau cocok → akses admin panel
+4. Kalau tidak → redirect ke /dashboard (atau 403)
+```
+
+**Implementasi:**
+- Env var `ADMIN_EMAILS` = daftar email dipisah koma (mis. `salman@nakespro.id,salman.alt@gmail.com`)
+- Cek di middleware Next.js (`middleware.ts`) untuk semua route `/admin/*`
+- Tidak perlu field `role` di tabel User untuk MVP — whitelist cukup
+- Migrasi ke role-based nanti kalau ada admin/staff tambahan
+
 ---
 
 ## 6. Data Model
@@ -316,6 +333,7 @@ model OrderPhoto {
 | 7 | File storage | Cloudflare R2 (server-route upload, 10GB free permanent + egress unlimited) |
 | 8 | Template selection | Client pilih sendiri di app (4 template) setelah register, sebelum bayar |
 | 9 | Urutan flow | Login → Pilih Billing → Pilih Template → Bayar → Isi Form → Build |
+| 10 | Admin auth | Email whitelist via env `ADMIN_EMAILS`, dicek di middleware. Tanpa role system |
 
 ---
 
