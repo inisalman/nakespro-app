@@ -236,9 +236,9 @@ model Order {
   // Foto-foto
   photos        OrderPhoto[]
   
-  // Status build
+  // Status build (lihat section 6.4 untuk transisi)
   buildStatus   String   @default("awaiting_payment")
-  // awaiting_payment → payment_pending → designing → done
+  // awaiting_payment → payment_confirmed → designing → review → done
   
   // Subdomain website
   subdomain     String?            // "nama" dari "nama.nakespro.id"
@@ -267,6 +267,43 @@ model OrderPhoto {
   createdAt DateTime @default(now())
 }
 ```
+
+### 6.4 Build Status — Transisi & Dashboard Client
+
+`buildStatus` melacak progress order dari bayar sampai website live. Sebagian transisi otomatis, sebagian manual oleh Salman.
+
+| Status | Arti | Dipicu oleh | Otomatis/Manual |
+|---|---|---|---|
+| `awaiting_payment` | Order dibuat, belum bayar | Order dibuat (setelah pilih template) | Otomatis |
+| `payment_confirmed` | Bayar dikonfirmasi Salman | Salman klik "Confirm Payment" di admin | Manual |
+| `designing` | Salman lagi bangun website | Salman klik "Mulai Build" di admin | Manual |
+| `review` | Website siap, nunggu cek client | Salman klik "Kirim untuk Review" | Manual |
+| `done` | Website live di subdomain | Salman klik "Publish" (set websiteUrl + isActive) | Manual |
+
+**Catatan transisi:**
+- Form bisa diisi client kapan aja, GAK ngubah buildStatus (independen)
+- `payment_confirmed` butuh dua syarat ideal: bayar masuk + form sudah diisi. Tapi Salman bisa override (mis. follow-up form via WA)
+- `review` opsional — Salman bisa langsung ke `done` kalau yakin
+
+**Tampilan di Dashboard Client (`/dashboard`):**
+
+Stepper visual horizontal/vertical yang nunjukin posisi order sekarang:
+
+```
+[✓] Pembayaran    [✓] Dikonfirmasi    [●] Sedang Dibuat    [ ] Review    [ ] Live
+     lunas             oleh tim            estimasi 2-3 hari
+```
+
+- Step yang udah lewat → centang hijau
+- Step aktif sekarang → highlight (dot/pulse)
+- Step belum tercapai → abu-abu
+- Mapping status ke label client-friendly:
+  - `awaiting_payment` → "Menunggu Pembayaran"
+  - `payment_confirmed` → "Pembayaran Dikonfirmasi"
+  - `designing` → "Website Sedang Dibuat"
+  - `review` → "Siap Direview"
+  - `done` → "Website Live" + tombol "Kunjungi Website" (ke websiteUrl)
+- Kalau ada `adminNotes` yang relevan → tampilin sebagai catatan dari tim (opsional)
 
 ---
 
@@ -368,6 +405,7 @@ model OrderPhoto {
 | 9 | Urutan flow | Login → Pilih Billing → Pilih Template → Bayar → Isi Form → Build |
 | 10 | Admin auth | Email whitelist via env `ADMIN_EMAILS`, dicek di middleware. Tanpa role system |
 | 11 | Renewal reminder | Cron harian flag order jatuh tempo di admin panel; Salman kirim WA manual. Grace period 7 hari sebelum suspend |
+| 12 | Build status | Client lihat progress via stepper di dashboard. 5 status: awaiting_payment → payment_confirmed → designing → review → done. Transisi manual oleh Salman (kecuali awaiting_payment) |
 
 ---
 
