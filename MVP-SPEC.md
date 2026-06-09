@@ -199,10 +199,49 @@ model OrderPhoto {
 | Database | PostgreSQL (`nakespro_template` di `askep_postgres`) |
 | ORM | Prisma v7 |
 | Auth | Better Auth / NextAuth.js (Google OAuth) |
-| File Upload | Local filesystem (MVP) |
+| File Upload | Cloudflare R2 (server-route upload via `/api/upload`) |
+| File Storage | 10GB free tier (permanent), egress unlimited |
 | Payment | QRIS static (manual confirm) |
 | Deploy | Easypanel (service `askep_nakespro-app`) |
 | Domain | `app.nakespro.id` + wildcard `*.nakespro.id` |
+
+---
+
+## 7.1 File Upload — Cloudflare R2
+
+**Metode:** Server-route upload (client → Next.js API → R2). Dipilih untuk MVP karena lebih sederhana & aman: kredensial R2 tidak pernah ke-expose ke browser, validasi (tipe file, ukuran, kompresi) terpusat di server.
+
+**Alur:**
+```
+1. Client pilih foto di /form/[orderId] (input file, multiple)
+2. Browser POST multipart/form-data → POST /api/upload
+3. Server (Next.js route handler):
+   a. Validasi: auth user, tipe (jpg/png/webp), ukuran (maks 5MB/foto)
+   b. (Opsional) kompres/resize via sharp sebelum simpan
+   c. PutObject ke R2 via @aws-sdk/client-s3 (S3-compatible)
+   d. Key: orders/{orderId}/{category}/{uuid}.{ext}
+   e. Simpan row OrderPhoto (url, category, caption) ke Postgres
+4. Server balikin URL publik → client render preview
+```
+
+**Konfigurasi R2:**
+| Item | Nilai |
+|---|---|
+| Bucket | `nakespro-uploads` |
+| Akses publik | Via custom domain `cdn.nakespro.id` (R2 public bucket / custom domain) |
+| SDK | `@aws-sdk/client-s3` (endpoint R2: `https://<accountid>.r2.cloudflarestorage.com`) |
+| Env | `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_PUBLIC_URL` |
+
+**Batasan upload (MVP):**
+- Format: JPG, PNG, WEBP
+- Ukuran maks: 5MB per foto
+- Maks foto per order: 20 (cukup untuk nakes, ruangan, alat, hasil kerja)
+
+**Kenapa server-route, bukan pre-signed URL?**
+- MVP: validasi & kompresi terpusat lebih mudah di-maintain
+- Kredensial R2 tidak ke-expose ke client
+- Trade-off: foto lewat server (sedikit beban bandwidth VPS), tapi untuk volume MVP (foto kecil, jarang) ini negligible
+- Bisa migrasi ke pre-signed URL nanti kalau volume upload naik
 
 ---
 
@@ -244,7 +283,7 @@ model OrderPhoto {
 | 4 | Renewal | QRIS manual tiap periode (bulanan/tahunan) |
 | 5 | Telat bayar | Website dinonaktifkan sementara (bisa diaktifkan lagi setelah bayar) |
 | 6 | Form submission | GAK GATE — submit kapan aja |
-| 7 | File storage | Local filesystem (MVP) |
+| 7 | File storage | Cloudflare R2 (server-route upload, 10GB free permanent + egress unlimited) |
 
 ---
 
