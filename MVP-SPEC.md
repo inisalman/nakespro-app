@@ -450,6 +450,27 @@ Stepper visual horizontal/vertical yang nunjukin posisi order sekarang:
 
 ---
 
+## 8.1 Roadmap Fase 1.5 (Nyusul, setelah core stabil)
+
+Fitur klinis tambahan untuk client Paket Hemat. **Dibangun setelah Fase 1 (website + payment + build manual) jalan & tervalidasi.** Tidak masuk MVP awal supaya launch cepat.
+
+### Booking via WhatsApp
+- Komponen booking di website client `{nama}.nakespro.id` (bukan di app)
+- Pasien isi form ringkas (nama, keluhan, tanggal preferensi) → redirect `wa.me/62xxx?text=...` (prefilled)
+- TANPA sistem slot/kalender, TANPA pembayaran via web — obrolan lanjut di WA nakes
+- (Opsional Fase 1.5+) simpan record Booking ke DB biar muncul di dashboard nakes
+
+### Laporan Tindakan
+- Nakes login di `app.nakespro.id` → tulis laporan setelah selesai order
+- **Manual** — nakes ketik sendiri (nama pasien + ringkasan tindakan + catatan). Tanpa auto-prefill dari booking, tanpa tabel Patient master (identitas pasien = teks bebas per laporan)
+- Generate PDF → upload ke R2 → share via `wa.me` prefilled (link PDF)
+- **Keamanan:** link pakai `shareToken` random + `expiresAt = createdAt + 7 hari` (link mati otomatis). Data tindakan pasien tidak boleh punya link publik permanen
+- Istilah: "Laporan Tindakan" / "Ringkasan Kunjungan", BUKAN "CPPT" (CPPT punya bobot klinis/legal formal yang tidak perlu untuk ringkasan ini)
+
+**Catatan arsitektur:** Booking yang menyimpan record (muncul di dashboard nakes) menarik multi-tenancy ringan (foreign key `nakesUserId` per Booking/Laporan, bukan isolasi DB). Laporan manual berdiri sendiri tanpa ketergantungan booking. Pertimbangkan saat masuk Fase 1.5.
+
+---
+
 ## 9. Keputusan (Final)
 
 | # | Topik | Keputusan |
@@ -468,6 +489,7 @@ Stepper visual horizontal/vertical yang nunjukin posisi order sekarang:
 | 12 | Build status | Client lihat progress via stepper di dashboard. 5 status: awaiting_payment → payment_confirmed → designing → review → done. Transisi manual oleh Salman (kecuali awaiting_payment) |
 | 13 | Subdomain | Reservasi nama otomatis saat isi form (validasi unik + reserved word). Deploy aktual manual oleh Salman. DNS wildcard `*.nakespro.id` |
 | 14 | Notifikasi admin | Otomatis via Telegram Bot (gratis, simpel). WA skip untuk MVP. Notif ke client tetap manual |
+| 15 | Booking & Laporan Tindakan | Fase 1.5 (nyusul, BUKAN MVP awal). Booking = redirect WA. Laporan = manual ketik nakes, PDF + share token expiry 7 hari. Bukan "CPPT" |
 
 ---
 
