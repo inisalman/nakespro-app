@@ -37,6 +37,7 @@ nakespro.id (Landing)
 app.nakespro.id (App — repo ini)
 ├── /auth/login → Google OAuth
 ├── /register → Pilih Hemat (bulanan/tahunan)
+├── /templates → Galeri 4 template (pilih)
 ├── /payment/[orderId] → QRIS + amount unik
 ├── /form/[orderId] → Detail website + foto
 ├── /dashboard → Progress client
@@ -63,6 +64,25 @@ app.nakespro.id (App — repo ini)
 
 ---
 
+## 3.1 Katalog Template
+
+Client pilih satu dari 4 template setelah register (sebelum bayar). Semua template responsive & dioptimasi untuk profil nakes/homecare.
+
+| ID | Nama | Karakter | Cocok untuk |
+|---|---|---|---|
+| `modern-light` | Modern Light | Bersih, terang, profesional | Praktik mandiri, klinik kecil |
+| `modern-dark` | Modern Dark | Elegan, gelap, premium | Layanan premium, homecare eksklusif |
+| `playful-geometry` | Playful Geometry | Ceria, bentuk geometris, warna berani | Layanan anak, fisioterapi, wellness |
+| `calm-warm` | Calm & Warm | Hangat, lembut, menenangkan | Perawatan lansia, mental health, home nursing |
+
+**Catatan:**
+- Preview tiap template ditampilkan di galeri `/templates` (screenshot/live demo)
+- Template tersimpan sebagai koleksi di repo `nakespro-templates`
+- Template bisa diganti via admin/WA selama build belum dimulai
+- `templateId` di Order menentukan template yang dipakai saat build
+
+---
+
 ## 4. User Flow (MVP)
 
 ```
@@ -70,26 +90,32 @@ app.nakespro.id (App — repo ini)
 2. Redirect ke app.nakespro.id/register?package=hemat
 3. Login dengan Google (OAuth) — akun otomatis dibuat
 4. Pilih billing: bulanan (Rp39rb) atau tahunan (Rp25rb/bln)
-5. Halaman pembayaran:
+5. Pilih template (galeri 4 pilihan):
+   - Modern Light, Modern Dark, Playful Geometry, Calm & Warm
+   - Lihat preview tiap template → pilih satu → buat Order
+6. Halaman pembayaran:
    - Generate totalAmount = baseAmount + uniqueCode
    - Bulanan: Rp39.000 + order ID = Rp39.015 (misal)
    - Tahunan: Rp300.000 + order ID = Rp300.021 (misal)
    - Tampilkan QRIS static
    - Client bayar → pergi / logout
-6. Client isi form detail (SUBMIT KAPAN AJA, gak gate):
+7. Client isi form detail (SUBMIT KAPAN AJA, gak gate):
    - Nama homecare/praktik
    - Deskripsi / tentang
    - Layanan: nakes / homecare / keduanya
    - Upload foto (nakes, ruangan, alat, hasil kerja)
    - Kontak: nomor WA, jam praktik, lokasi, Google Maps embed
-7. Client submit form → Salman terima notifikasi (WA)
-8. Salman confirm payment (admin panel) → mulai build
-9. Selesai → Salman deploy ke {nama}.nakespro.id → kirim link via WA
-10. Client login dashboard → lihat website link
-11. Setiap periode (bulan/tahun): pengingat bayar via WA → ulangi step 5
+8. Client submit form → Salman terima notifikasi (WA)
+9. Salman confirm payment (admin panel) → mulai build
+10. Selesai → Salman deploy ke {nama}.nakespro.id → kirim link via WA
+11. Client login dashboard → lihat website link
+12. Setiap periode (bulan/tahun): pengingat bayar via WA → ulangi step 6
 ```
 
-**Catatan:** Form bisa disubmit SEBELUM atau SESUDAH pembayaran.
+**Catatan:**
+- Urutan: Login → Pilih Billing → Pilih Template → Bayar → Isi Form → Build
+- Form bisa disubmit SEBELUM atau SESUDAH pembayaran
+- Template bisa diganti via admin/WA sebelum build dimulai
 
 ---
 
@@ -100,6 +126,7 @@ app.nakespro.id (App — repo ini)
 | `/auth/login` | Publik | Login dengan Google |
 | `/auth/callback` | Publik | OAuth callback |
 | `/register` | Auth | Pilih billing (bulanan/tahunan) |
+| `/templates` | Auth | Galeri 4 template + preview → pilih → buat Order |
 | `/payment/[orderId]` | Auth | QRIS + amount unik |
 | `/form/[orderId]` | Auth | Form detail (3 steps) + upload foto |
 | `/dashboard` | Auth | Progress: payment, form, website link |
@@ -135,6 +162,9 @@ model Order {
   
   // Paket: Hemat saja (untuk MVP)
   packageType   String   @default("hemat") // "hemat"
+  
+  // Template pilihan (dipilih setelah register, sebelum bayar)
+  templateId    String             // "modern-light" | "modern-dark" | "playful-geometry" | "calm-warm"
   
   // Billing
   billingCycle  String             // "monthly" | "yearly"
@@ -284,6 +314,8 @@ model OrderPhoto {
 | 5 | Telat bayar | Website dinonaktifkan sementara (bisa diaktifkan lagi setelah bayar) |
 | 6 | Form submission | GAK GATE — submit kapan aja |
 | 7 | File storage | Cloudflare R2 (server-route upload, 10GB free permanent + egress unlimited) |
+| 8 | Template selection | Client pilih sendiri di app (4 template) setelah register, sebelum bayar |
+| 9 | Urutan flow | Login → Pilih Billing → Pilih Template → Bayar → Isi Form → Build |
 
 ---
 
