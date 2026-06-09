@@ -5,19 +5,19 @@
 **Versi:** 1.0
 **Tanggal:** Juni 2026
 **Pemilik:** Salman Al Farisi
-**Status:** MVP — Fase 1 Custom Service
+**Status:** MVP — Fase 1 Paket Hemat
 
 ---
 
 ## 1. Ringkasan Produk
 
-**NakesPro App** adalah aplikasi untuk mengelola flow pemesanan jasa pembuatan website nakes — mulai dari registrasi, pilih paket, pembayaran QRIS manual, isi form detail website, hingga tracking progress build.
+**NakesPro App** adalah aplikasi untuk mengelola flow pemesanan **Paket Hemat** — paket website template terjangkau untuk nakes. Mulai dari registrasi, pembayaran QRIS manual, isi form detail website, hingga tracking progress build.
 
-Aplikasi ini menerima traffic dari landing page (`nakespro.id`), mengelola client orders, dan admin panel buat Salman untuk confirm payment & track build status.
+Aplikasi ini menerima traffic dari landing page (`nakespro.id`), khusus untuk **Paket Hemat**. Paket Advance & Enterprise ditangani manual via WhatsApp.
 
-**Paket yang dijual:**
-- **Custom:** Rp2.000.000 one-off
-- **Template:** Rp20.000/bulan
+**Paket di app ini:**
+- **Hemat Bulanan:** Rp39.000/bulan
+- **Hemat Tahunan:** Rp25.000/bulan (ditagih Rp300.000/tahun)
 
 **Output:** Website client di subdomain `{nama}.nakespro.id`
 
@@ -26,15 +26,16 @@ Aplikasi ini menerima traffic dari landing page (`nakespro.id`), mengelola clien
 ## 2. Tujuan & Sasaran
 
 ### Tujuan
-- Aplikasi yang mengotomasi flow order → form → tracking.
+- Otomasi flow order Paket Hemat: register → bayar → form → tracking.
 - Admin panel untuk Salman manage payment & build status.
-- Notifikasi client progress (optional, MVP bisa sederhana).
+- Renewal tracking (QRIS manual tiap periode).
 
 ### Metrik Sukses
-- App live di `app.nakespro.id` ✅
+- App live di `app.nakespro.id`
 - Google OAuth login berfungsi
 - QRIS payment tracking manual
 - Admin panel operable
+- Client bisa lihat website link di dashboard
 
 ---
 
@@ -42,37 +43,43 @@ Aplikasi ini menerima traffic dari landing page (`nakespro.id`), mengelola clien
 
 | Persona | Kebutuhan |
 |---|---|
-| **Client (Nakes/Homecare)** | Register, pilih paket, bayar, isi form, track progress |
-| **Admin (Salman)** | Lihat orders, confirm payment, update build status |
+| **Client (Nakes Paket Hemat)** | Register, bayar, isi form, track progress, lihat website |
+| **Admin (Salman)** | Lihat orders, confirm payment, update build status, kelola renewal |
 
 ---
 
-## 4. Hubungan dengan Repo Lain
+## 4. Scope: Paket Hemat Saja
+
+| Paket | Channel | Alasan |
+|---|---|---|
+| **Hemat** (Rp25-39rb/bln) | ✅ App ini | Volume tinggi, perlu otomasi |
+| **Advance** (Rp166-200rb/bln) | ❌ WhatsApp manual | Custom design, butuh konsultasi |
+| **Enterprise** (custom) | ❌ WhatsApp manual | Kompleks, multi-site, integrasi |
+
+App ini fokus ke Paket Hemat karena volume-nya yang tinggi dan flow-nya repetitif (cocok untuk otomasi). Paket premium butuh sentuhan personal via WA.
+
+---
+
+## 5. Hubungan dengan Repo Lain
 
 ```
 Landing (inisalman/nakespro)
-  ├── Paket: Custom / Template
-  ├── Galeri: 4 template
-  └── CTA: redirect ke app.nakespro.id
-              ↓
-         (query param: ?template=modern-light)
+├── Paket Hemat → "Daftar Sekarang" → app.nakespro.id
+├── Paket Advance → WhatsApp
+└── Paket Enterprise → WhatsApp
               ↓
 App (inisalman/nakespro-app) ← repo ini
-  ├── Google OAuth login
-  ├── Confirm pilihan template
-  ├── Payment QRIS
-  ├── Form detail website
-  ├── Admin: confirm payment, track build
-  └── Output: link website client
+├── Login Google → bayar → form → tracking
+└── Output: link website client
               ↓
          Website Client ({nama}.nakespro.id)
 ```
 
-Untuk detail lengkap flow, lihat **MVP-SPEC.md** di repo ini.
+Untuk detail teknis & arsitektur, lihat **MVP-SPEC.md** di repo ini.
 
 ---
 
-## 5. Stack Teknis
+## 6. Stack Teknis
 
 | Layer | Pilihan |
 |---|---|
@@ -85,26 +92,26 @@ Untuk detail lengkap flow, lihat **MVP-SPEC.md** di repo ini.
 
 ---
 
-## 6. Roadmap
+## 7. Roadmap
 
-### Sprint 1 — Setup & Auth (target: 3-4 hari)
+### Sprint 1 — Setup & Auth (3-4 hari)
 - [ ] Next.js 16 + Prisma + Tailwind v4 setup
 - [ ] Google OAuth (Better Auth)
 - [ ] Database schema migration
 - [ ] Landing redirect ke app
 
-### Sprint 2 — Core Flow (target: 5-7 hari)
-- [ ] Register + template picker
+### Sprint 2 — Core Flow (5-7 hari)
+- [ ] Register: pilih billing (bulanan/tahunan)
 - [ ] Payment QRIS halaman
 - [ ] Form detail (3 steps)
 - [ ] File upload
 
-### Sprint 3 — Dashboard & Admin (target: 4-5 hari)
-- [ ] Client dashboard
-- [ ] Admin panel
+### Sprint 3 — Dashboard & Admin (4-5 hari)
+- [ ] Client dashboard (progress + link website)
+- [ ] Admin panel (list orders, confirm payment)
 - [ ] WA notification
 
-### Sprint 4 — Deploy (target: 2-3 hari)
+### Sprint 4 — Deploy (2-3 hari)
 - [ ] Easypanel setup
 - [ ] DNS & SSL
 - [ ] E2E testing
@@ -113,15 +120,18 @@ Untuk detail lengkap flow, lihat **MVP-SPEC.md** di repo ini.
 
 ---
 
-## 7. Keputusan (Final)
+## 8. Keputusan (Final)
 
 | # | Topik | Keputusan |
 |---|---|---|
-| 1 | Payment | QRIS Manual — Salman confirm via admin |
-| 2 | Pre-select template | Query param dari landing → auto-fill di app |
-| 3 | Form submission | GAK GATE — submit kapan aja |
-| 4 | Notifikasi | WA redirect link (gratis, MVP) |
-| 5 | File storage | Local filesystem (MVP), S3/R2 later |
+| 1 | Paket di app | Hemat saja. Advance & Enterprise via WA manual |
+| 2 | Billing | Bulanan (Rp39rb) atau Tahunan (Rp300rb) |
+| 3 | Payment | QRIS Manual — Salman confirm via admin |
+| 4 | Renewal | QRIS manual tiap periode |
+| 5 | Telat bayar | Website suspended sementara |
+| 6 | Form submission | GAK GATE — submit kapan aja |
+| 7 | Notifikasi | WA redirect link (gratis, MVP) |
+| 8 | File storage | Local filesystem (MVP), S3/R2 later |
 
 ---
 
