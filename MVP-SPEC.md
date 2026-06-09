@@ -119,6 +119,34 @@ Client pilih satu dari 4 template setelah register (sebelum bayar). Semua templa
 
 ---
 
+## 4.1 Renewal Flow (Pembayaran Berulang)
+
+**Siklus renewal:**
+```
+1. Order dibuat dengan nextBillingDate = createdAt + billingCycle (30 hari untuk monthly, 365 hari untuk yearly)
+2. Tiap hari cron cek Order mana yang mendekati/lewat nextBillingDate
+3. Order status "active" & nextBillingDate ≤ hari ini → masuk daftar "Perlu Reminder" di admin panel
+4. Admin (Salman) kirim WA ke client: "Tagihan Anda untuk {websiteName} siap dibayar: Rp[amount]. QRIS: [link]"
+5. Client bayar QRIS → notifikasi ke admin
+6. Admin confirm payment di admin panel → update paymentStatus = "paid", hitung nextBillingDate baru
+7. Website tetap aktif, order berlanjut
+8. Telat bayar >7 hari (grace period) → website dinonaktifkan sementara (maintenance page, atau 503)
+9. Setelah bayar → website aktif lagi, nextBillingDate di-update
+```
+
+**Di Admin Panel:**
+- Widget "Orders Perlu Reminder" → list order dengan nextBillingDate ≤ hari ini
+- Kolom status tiap order: "Active" (bayar on-time), "Pending Payment" (overdue tapi <7 hari), "Suspended" (overdue >7 hari)
+- Action: mark as paid, update nextBillingDate, suspend/unsuspend website
+
+**Implementasi:**
+- Field `nextBillingDate` di Order → di-set saat order dibuat atau saat confirm payment
+- Cron job (harian, mis. jam 06:00 pagi): query Order `WHERE nextBillingDate ≤ NOW() AND paymentStatus != 'paid'` → tampilin di admin panel
+- Field `isActive` atau `suspendedAt` di Order → untuk track status website (active/suspended)
+- Saat build selesai & website live → set `isActive = true`
+
+---
+
 ## 5. Halaman & Routes (app.nakespro.id)
 
 | Route | Akses | Fungsi |
@@ -190,6 +218,11 @@ model Order {
   totalAmount   Int                // baseAmount + uniqueCode
   paymentStatus String   @default("pending") // pending | paid | cancelled
   nextBillingDate DateTime?        // Kapan tagihan berikutnya
+  lastPaidAt    DateTime?          // Kapan terakhir bayar dikonfirmasi
+  
+  // Status website (untuk renewal/suspend)
+  isActive      Boolean  @default(false) // true saat website live & bayar lancar
+  suspendedAt   DateTime?          // Diisi saat website dinonaktifkan (telat bayar >7 hari)
   
   // Detail website (diisi client via form)
   websiteName   String?            // Nama homecare/praktik
@@ -334,6 +367,7 @@ model OrderPhoto {
 | 8 | Template selection | Client pilih sendiri di app (4 template) setelah register, sebelum bayar |
 | 9 | Urutan flow | Login → Pilih Billing → Pilih Template → Bayar → Isi Form → Build |
 | 10 | Admin auth | Email whitelist via env `ADMIN_EMAILS`, dicek di middleware. Tanpa role system |
+| 11 | Renewal reminder | Cron harian flag order jatuh tempo di admin panel; Salman kirim WA manual. Grace period 7 hari sebelum suspend |
 
 ---
 
