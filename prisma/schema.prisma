@@ -83,6 +83,7 @@ model Order {
   uniqueCode      Int
   totalAmount     Int
   paymentStatus   String    @default("pending")
+  paymentProofUrl String?
   nextBillingDate DateTime?
   lastPaidAt      DateTime?
 
