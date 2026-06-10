@@ -16,6 +16,11 @@ export default async function DashboardPage() {
     orderBy: { createdAt: "desc" },
   });
 
+  // If no orders, redirect to register (first time user)
+  if (orders.length === 0) {
+    redirect("/register");
+  }
+
   const buildStatusLabels: Record<string, string> = {
     awaiting_payment: "Menunggu Pembayaran",
     payment_confirmed: "Pembayaran Dikonfirmasi",
@@ -50,23 +55,7 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        {orders.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Belum Ada Pesanan
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Mulai buat website profesional untuk praktik Anda
-            </p>
-            <Link
-              href="/register"
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
-            >
-              Mulai Pesan Website
-            </Link>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {orders.map((order) => (
               <div
                 key={order.id}
@@ -218,7 +207,6 @@ export default async function DashboardPage() {
               </div>
             ))}
           </div>
-        )}
       </div>
     </div>
   );

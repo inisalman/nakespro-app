@@ -6,7 +6,7 @@ export default function LoginButton() {
   const handleLogin = async () => {
     await signIn.social({
       provider: "google",
-      callbackURL: "/register",
+      callbackURL: "/dashboard",
     });
   };
 
