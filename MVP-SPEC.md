@@ -207,6 +207,39 @@ Salman dapat notifikasi otomatis saat ada event penting, biar gak perlu cek admi
 
 ---
 
+## 4.4 Konfirmasi Pembayaran (Semi-Otomatis)
+
+Karena pakai QRIS static (tanpa payment gateway), konfirmasi pakai pola **semi-otomatis** — secepat mungkin tanpa cek mutasi manual.
+
+**Alur:**
+```
+1. Client di /payment/[orderId] → scan QRIS static + bayar unique amount (Rp39.015)
+2. Client klik tombol "Saya Sudah Bayar" + upload screenshot bukti transfer
+3. Sistem set paymentStatus = "claimed" (klaim, belum dikonfirmasi) + simpan bukti ke R2
+4. notifyAdmin() kirim ke Telegram: "Order #123, Rp39.015, [link bukti], [link admin]"
+5. Salman buka link admin → cek bukti vs unique amount → klik "Confirm Payment"
+6. paymentStatus = "paid", buildStatus → payment_confirmed
+```
+
+**Kenapa semi-otomatis, bukan full-auto:**
+- Full webhook auto-confirm butuh payment gateway (Midtrans/iPaymu/Xendit) → semua perlu verifikasi badan usaha / app sudah production. Skip untuk MVP perorangan.
+- Scraping m-banking dilarang ToS bank → tidak dipakai.
+- Pola "klaim + upload bukti + admin 1-klik confirm" = ~10 detik kerja Salman, zero infra tambahan.
+
+**paymentStatus values (update):** `pending` → `claimed` → `paid` | `cancelled`
+- `pending`: order dibuat, belum ada klaim bayar
+- `claimed`: client klaim sudah bayar + upload bukti (nunggu Salman konfirmasi)
+- `paid`: Salman konfirmasi bukti valid
+- `cancelled`: dibatalkan
+
+**Field tambahan di Order:**
+- `paymentProofUrl String?` — URL screenshot bukti transfer di R2
+- `paymentClaimedAt DateTime?` — kapan client klik "Sudah Bayar"
+
+**Upgrade path (Fase 2):** Migrasi ke Midtrans (sandbox langsung jalan, terima perorangan) untuk full webhook auto-confirm saat volume naik & usaha sudah resmi. Butuh halaman T&C, Refund Policy, FAQ (prasyarat semua gateway).
+
+---
+
 ## 5. Halaman & Routes (app.nakespro.id)
 
 | Route | Akses | Fungsi |
@@ -237,6 +270,34 @@ Akses `/admin/*` dibatasi via **email whitelist** (cocok untuk MVP, tanpa role s
 - Cek di middleware Next.js (`middleware.ts`) untuk semua route `/admin/*`
 - Tidak perlu field `role` di tabel User untuk MVP — whitelist cukup
 - Migrasi ke role-based nanti kalau ada admin/staff tambahan
+
+### 5.2 Dashboard Client (`/dashboard`)
+
+Dashboard adalah halaman utama client setelah login. Detail yang sudah disubmit **tidak bisa di-edit sendiri** oleh client — semua revisi lewat WA. Ini bikin dashboard simpel & menghindari kebingungan.
+
+**Komponen:**
+
+1. **Progress Stepper** — status order saat ini:
+   ```
+   [✓] Pembayaran → [✓] Dikonfirmasi → [●] Sedang Dibuat → [ ] Review → [ ] Live
+   ```
+   - Status lewat → centang hijau; status aktif → highlight (dot/pulse); belum tercapai → abu-abu
+   - Mapping label lihat section 6.4
+
+2. **Action Card Kontekstual** — info + langkah berikutnya, tergantung status:
+   - `awaiting_payment` → "Selesaikan pembayaran" + tombol ke halaman pembayaran
+   - Form belum diisi → "Lengkapi detail website kamu" + tombol ke form
+   - `designing` → "Tim sedang membuat website untuk kamu. Estimasi 2-3 hari."
+   - `done` → "Website kamu sudah live!" + tombol Kunjungi Website
+
+3. **Ringkasan Langganan**:
+   - Paket: Hemat (Bulanan/Tahunan)
+   - Status: Active / Pending / Suspended
+   - Tanggal tagihan berikutnya (`nextBillingDate`) di-highlight
+
+4. **Preview Data yang Disubmit** (read-only):
+   - Ringkasan detail terisi (nama website, layanan, kontak, dst)
+   - Revisi via WA jika diperlukan (tidak ada tombol edit)
 
 ---
 
@@ -276,7 +337,9 @@ model Order {
   baseAmount    Int                // 39000 (monthly) | 300000 (yearly)
   uniqueCode    Int                // order ID (1-999)
   totalAmount   Int                // baseAmount + uniqueCode
-  paymentStatus String   @default("pending") // pending | paid | cancelled
+  paymentStatus String   @default("pending") // pending | claimed | paid | cancelled
+  paymentProofUrl String?            // URL screenshot bukti transfer di R2
+  paymentClaimedAt DateTime?         // Kapan client klik "Sudah Bayar"
   nextBillingDate DateTime?        // Kapan tagihan berikutnya
   lastPaidAt    DateTime?          // Kapan terakhir bayar dikonfirmasi
   
@@ -422,6 +485,84 @@ Stepper visual horizontal/vertical yang nunjukin posisi order sekarang:
 
 ---
 
+## 7.2 Setup & Scaffolding (Implementasi)
+
+Keputusan teknis final untuk setup project (siap dieksekusi Claude CLI / manual).
+
+### Scaffolding
+- `npx create-next-app@latest .` dengan: TypeScript, ESLint, Tailwind, **src/ directory**, App Router, Turbopack, import alias `@/*`
+- Bersihkan boilerplate `src/app/page.tsx` jadi landing minimal
+
+### Dependencies
+```
+pnpm add prisma @prisma/client better-auth @aws-sdk/client-s3 sharp zod
+pnpm add -D @types/node
+```
+- Pakai versi **latest** saat install (Prisma 7, Better Auth latest)
+- `zod` untuk validasi form & API input
+
+### TypeScript & ESLint
+- Default Next.js: TS strict mode + `next/core-web-vitals`. Prioritas MVP speed, jangan over-strict.
+
+### Prisma (v7)
+- Generator: **`prisma-client`** (provider baru Prisma 7) dengan `output = "../src/generated/prisma"`
+- Import client dari `@/generated/prisma`, bukan `@prisma/client`
+- Singleton pattern di `src/lib/prisma.ts` (hindari multiple instance di dev hot-reload)
+- **`.gitignore`**: tambah `src/generated/` (generated code jangan di-commit)
+- **`package.json` scripts**: tambah `"postinstall": "prisma generate"` (WAJIB untuk deploy Easypanel — fresh install harus regenerate client)
+- Schema: `subdomain @unique`, index `@@index([userId])` + `@@index([nextBillingDate, paymentStatus])`
+
+### Auth — Better Auth
+- `src/lib/auth.ts` (server instance): `prismaAdapter(prisma, { provider: "postgresql" })` + `baseURL: process.env.BETTER_AUTH_URL` + `secret: process.env.BETTER_AUTH_SECRET` + Google social provider
+- `src/lib/auth-client.ts` (client): `createAuthClient()` — default same-origin, no baseURL untuk MVP
+- `src/app/api/auth/[...all]/route.ts`: `toNextJsHandler(auth)` (export GET, POST)
+- Setelah install: `npx @better-auth/cli generate --adapter prisma` → tambah model Session/Account/Verification + reconcile User (`emailVerified Boolean` wajib)
+- **Google OAuth redirect URI** (set di Google Console saat konfigurasi kredensial):
+  - Local: `http://localhost:3000/api/auth/callback/google`
+  - Prod: `https://app.nakespro.id/api/auth/callback/google`
+- Generate secret: `openssl rand -base64 32`
+
+### Admin Protection — Dua Lapis (Better Auth gotcha)
+Better Auth pakai Node API yang TIDAK jalan di Edge runtime middleware. **JANGAN** taruh cek email whitelist di `middleware.ts`.
+- **Lapis 1 — `src/middleware.ts`** (Edge-safe, cek cookie ADA/nggak): `getSessionCookie(req)` dari `better-auth/cookies` → kalau `/admin/*` tanpa cookie → redirect `/auth/login`. Matcher: `["/admin/:path*"]`
+- **Lapis 2 — `src/app/admin/layout.tsx`** (server component, cek email whitelist sebenarnya): `auth.api.getSession()` + cek `session.user.email ∈ ADMIN_EMAILS` → kalau bukan admin → `redirect("/dashboard")`
+
+### File Upload — R2 (skeleton dulu)
+- `src/lib/r2.ts`: skeleton S3Client + TODO `uploadToR2(key, buffer, contentType)`
+- `src/app/api/upload/route.ts`: POST handler — auth check (Better Auth session) + validasi (tipe jpg/png/webp, maks 5MB) + TODO sharp compress → R2 → simpan OrderPhoto. Return 501 sementara.
+
+### Telegram Helper (skeleton, graceful no-op)
+- `src/lib/telegram.ts`: `notifyAdmin(message)` — kalau `TELEGRAM_BOT_TOKEN` kosong → `console.log` (no-op, jangan crash); kalau ada → POST ke Bot API. Fire-and-forget, no retry untuk MVP.
+
+### .env.example
+```
+# Database
+DATABASE_URL="postgresql://nakespro:PASSWORD@HOST:5432/nakespro_template"
+# Better Auth
+BETTER_AUTH_SECRET=""
+BETTER_AUTH_URL="http://localhost:3000"
+# Google OAuth
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+# Admin whitelist (comma-separated)
+ADMIN_EMAILS="salman@nakespro.id"
+# Cloudflare R2
+R2_ACCOUNT_ID=""
+R2_ACCESS_KEY_ID=""
+R2_SECRET_ACCESS_KEY=""
+R2_BUCKET="nakespro-uploads"
+R2_PUBLIC_URL="https://cdn.nakespro.id"
+# Telegram Bot
+TELEGRAM_BOT_TOKEN=""
+TELEGRAM_ADMIN_CHAT_ID=""
+```
+
+### Catatan Database
+- Untuk dev lokal: pakai placeholder `DATABASE_URL` dulu, konfigurasi belakangan (lokal Docker Postgres / connect ke production)
+- Production: shared container `askep_postgres` (host internal `askep_postgres:5432`), DB `nakespro_template`, superuser `nakespro`
+
+---
+
 ## 8. Roadmap MVP (Fase 1)
 
 ### Sprint 1 — Setup & Auth (3-4 hari)
@@ -477,7 +618,7 @@ Fitur klinis tambahan untuk client Paket Hemat. **Dibangun setelah Fase 1 (websi
 |---|---|---|
 | 1 | Paket di app | Hemat saja (Rp25-39rb/bln). Advance & Enterprise via WA manual |
 | 2 | Billing | Bulanan (Rp39rb) atau Tahunan (Rp300rb) |
-| 3 | Payment | QRIS manual + unique amount, confirm manual Salman |
+| 3 | Payment | QRIS static manual + unique amount. Konfirmasi semi-otomatis: client klik "Sudah Bayar" + upload bukti → notif Telegram → Salman 1-klik confirm |
 | 4 | Renewal | QRIS manual tiap periode (bulanan/tahunan) |
 | 5 | Telat bayar | Website dinonaktifkan sementara (bisa diaktifkan lagi setelah bayar) |
 | 6 | Form submission | GAK GATE — submit kapan aja |
@@ -490,6 +631,8 @@ Fitur klinis tambahan untuk client Paket Hemat. **Dibangun setelah Fase 1 (websi
 | 13 | Subdomain | Reservasi nama otomatis saat isi form (validasi unik + reserved word). Deploy aktual manual oleh Salman. DNS wildcard `*.nakespro.id` |
 | 14 | Notifikasi admin | Otomatis via Telegram Bot (gratis, simpel). WA skip untuk MVP. Notif ke client tetap manual |
 | 15 | Booking & Laporan Tindakan | Fase 1.5 (nyusul, BUKAN MVP awal). Booking = redirect WA. Laporan = manual ketik nakes, PDF + share token expiry 7 hari. Bukan "CPPT" |
+| 16 | Tech stack setup | create-next-app (TS+Tailwind+src/+App Router+Turbopack). Prisma 7 (`prisma-client` gen → src/generated/prisma). Better Auth + Google OAuth. Admin protection 2 lapis (cookie di middleware + email whitelist di admin layout). Detail lihat section 7.2 |
+| 17 | Konfirmasi pembayaran | Semi-otomatis (klaim + upload bukti + admin 1-klik). Full auto (Midtrans webhook) = Fase 2 saat ada badan usaha. iPaymu/Flip butuh TDPSE/verifikasi usaha, skip dulu (perorangan) |
 
 ---
 
