@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "@/lib/auth-client";
 
 interface NavbarProps {
   user: {
@@ -13,10 +14,17 @@ interface NavbarProps {
 
 export default function Navbar({ user, isAdmin }: NavbarProps) {
   const pathname = usePathname();
+  const router = useRouter();
 
   if (!user) {
     return null;
   }
+
+  const handleLogout = async () => {
+    await signOut();
+    router.push("/");
+    router.refresh();
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 shadow-sm">
@@ -58,14 +66,12 @@ export default function Navbar({ user, isAdmin }: NavbarProps) {
             <div className="text-sm text-gray-700">
               <span className="font-medium">{user.name}</span>
             </div>
-            <form action="/api/auth/sign-out" method="POST">
-              <button
-                type="submit"
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition"
-              >
-                Logout
-              </button>
-            </form>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </div>
