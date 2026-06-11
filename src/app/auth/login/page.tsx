@@ -13,43 +13,133 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4">
-      <div className="max-w-md w-full">
-        <div className="bg-white rounded-lg shadow-xl p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              NakesPro
-            </h1>
-            <p className="text-gray-600">
-              Website Builder untuk Tenaga Kesehatan & Homecare
-            </p>
-          </div>
+    <div className="min-h-screen grid lg:grid-cols-2">
+      {/* Left Panel - Bold Hero with Gradient */}
+      <div className="relative gradient-hero overflow-hidden flex items-center justify-center p-8 lg:p-16">
+        {/* Decorative geometric shapes */}
+        <div className="absolute inset-0 overflow-hidden opacity-20">
+          <div className="absolute top-20 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border-2 border-white/30 rounded-3xl rotate-12"></div>
+        </div>
 
-          <div className="space-y-4">
-            <LoginButton />
-
-            <div className="text-center text-sm text-gray-500">
-              Dengan masuk, Anda menyetujui syarat & ketentuan kami
+        {/* Content */}
+        <div className="relative z-10 max-w-xl text-white">
+          <div className="animate-fade-in-up opacity-0">
+            <div className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold mb-6">
+              Platform Website Builder #1 untuk Nakes
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-gray-200 text-center">
-            <p className="text-sm text-gray-600">
-              Belum punya akun?{" "}
-              <span className="font-semibold text-blue-600">
-                Login otomatis membuat akun baru
-              </span>
-            </p>
+          <h1 className="text-display mb-6 animate-fade-in-up opacity-0 delay-100">
+            Website Profesional dalam Hitungan Hari
+          </h1>
+
+          <p className="text-body-large opacity-90 mb-8 animate-fade-in-up opacity-0 delay-200">
+            Bergabung dengan ratusan tenaga kesehatan yang sudah memiliki website profesional.
+            Mulai dari Rp25.000/bulan.
+          </p>
+
+          <div className="space-y-4 animate-fade-in-up opacity-0 delay-300">
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0 w-6 h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <span className="text-lg">4 template profesional ready-to-use</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0 w-6 h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <span className="text-lg">Live dalam 2-3 hari kerja</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0 w-6 h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <span className="text-lg">Domain gratis .nakespro.id</span>
+            </div>
+          </div>
+
+          <div className="mt-12 pt-8 border-t border-white/20 animate-fade-in opacity-0 delay-400">
+            <p className="text-sm opacity-75 mb-3">Dipercaya oleh profesional kesehatan:</p>
+            <div className="flex items-center gap-2">
+              <div className="flex -space-x-2">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="w-10 h-10 rounded-full bg-white/30 backdrop-blur-sm border-2 border-white/50"></div>
+                ))}
+              </div>
+              <span className="text-sm font-semibold ml-2">+200 praktisi</span>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className="mt-6 text-center">
-          <Link
-            href="/"
-            className="text-sm text-gray-600 hover:text-gray-900 underline"
-          >
-            ← Kembali ke Beranda
-          </Link>
+      {/* Right Panel - Clean Form Area */}
+      <div className="flex items-center justify-center p-8 lg:p-16 bg-white">
+        <div className="w-full max-w-md">
+          <div className="animate-scale-in opacity-0 delay-200">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors mb-8"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              <span className="text-sm font-medium">Kembali ke Beranda</span>
+            </Link>
+
+            <div className="mb-10">
+              <h2 className="text-headline mb-3">
+                Masuk ke NakesPro
+              </h2>
+              <p className="text-body text-neutral-600">
+                Kelola website profesional Anda dengan mudah
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              <LoginButton />
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-neutral-200"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-4 bg-white text-neutral-500">atau</span>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <p className="text-body-small text-neutral-600">
+                  Belum punya akun?{" "}
+                  <span className="font-semibold text-neutral-900">
+                    Login otomatis membuat akun baru
+                  </span>
+                </p>
+              </div>
+
+              <div className="pt-6 border-t border-neutral-100">
+                <p className="text-body-small text-neutral-500 text-center">
+                  Dengan masuk, Anda menyetujui{" "}
+                  <a href="#" className="text-neutral-900 hover:underline font-medium">
+                    Syarat & Ketentuan
+                  </a>
+                  {" "}dan{" "}
+                  <a href="#" className="text-neutral-900 hover:underline font-medium">
+                    Kebijakan Privasi
+                  </a>
+                  {" "}kami
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
