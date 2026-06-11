@@ -11,162 +11,159 @@ export default async function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Pilih Paket Hemat
+    <div className="min-h-screen bg-neutral-50">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header */}
+        <div className="text-center mb-12 animate-fade-in-up opacity-0">
+          <h1 className="text-display mb-4">
+            Pilih Paket Anda
           </h1>
-          <p className="text-lg text-gray-600">
-            Mulai dengan template website yang terjangkau dan profesional
+          <p className="text-body-large text-neutral-600">
+            Website profesional untuk tenaga kesehatan, mulai dari Rp25.000/bulan
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        {/* Pricing Cards */}
+        <div className="grid md:grid-cols-2 gap-8 mb-12">
           {/* Monthly Plan */}
-          <Link href="/templates?billing=monthly">
-            <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow cursor-pointer p-8 border-2 border-transparent hover:border-blue-500">
+          <Link href="/templates?billing=monthly" className="group">
+            <div className="bg-white rounded-2xl border-2 border-neutral-200 hover:border-primary-500 p-8 transition-all hover:shadow-xl hover:-translate-y-1 animate-scale-in opacity-0 delay-100">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                  Hemat Bulanan
+                <h2 className="text-title mb-3">
+                  Paket Bulanan
                 </h2>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-blue-600">
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-5xl font-bold text-neutral-900">
                     Rp39.000
                   </span>
-                  <span className="text-gray-600">/bulan</span>
+                  <span className="text-body text-neutral-500">/bulan</span>
                 </div>
-              </div>
-
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center gap-3 text-gray-700">
-                  <svg
-                    className="w-5 h-5 text-green-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Website template responsif
-                </li>
-                <li className="flex items-center gap-3 text-gray-700">
-                  <svg
-                    className="w-5 h-5 text-green-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Domain subdomain gratis
-                </li>
-                <li className="flex items-center gap-3 text-gray-700">
-                  <svg
-                    className="w-5 h-5 text-green-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Pembayaran bulanan fleksibel
-                </li>
-              </ul>
-
-              <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-                Lanjut ke Template
-              </button>
-            </div>
-          </Link>
-
-          {/* Yearly Plan */}
-          <Link href="/templates?billing=yearly">
-            <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow cursor-pointer p-8 border-2 border-green-500 relative">
-              <div className="absolute top-0 right-0 bg-green-500 text-white px-4 py-1 text-sm font-semibold rounded-bl-lg">
-                Hemat 36%
-              </div>
-
-              <div className="mb-6 mt-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                  Hemat Tahunan
-                </h2>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-green-600">
-                    Rp300.000
-                  </span>
-                  <span className="text-gray-600">/tahun</span>
-                </div>
-                <p className="text-sm text-gray-500 mt-2">
-                  Rp25.000 per bulan
+                <p className="text-body-small text-neutral-500">
+                  Bayar setiap bulan, fleksibel
                 </p>
               </div>
 
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center gap-3 text-gray-700">
-                  <svg
-                    className="w-5 h-5 text-green-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Semua fitur paket bulanan
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                    <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-body text-neutral-700">4 template profesional pilihan</span>
                 </li>
-                <li className="flex items-center gap-3 text-gray-700">
-                  <svg
-                    className="w-5 h-5 text-green-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Hemat hingga Rp168.000/tahun
+                <li className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                    <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-body text-neutral-700">Domain gratis *.nakespro.id</span>
                 </li>
-                <li className="flex items-center gap-3 text-gray-700">
-                  <svg
-                    className="w-5 h-5 text-green-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Komitmen tahunan, hemat maksimal
+                <li className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                    <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-body text-neutral-700">Live dalam 2-3 hari kerja</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                    <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-body text-neutral-700">Responsive di semua perangkat</span>
                 </li>
               </ul>
 
-              <button className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">
-                Lanjut ke Template
+              <button className="w-full btn-primary group-hover:bg-neutral-800">
+                Pilih Paket Bulanan
+              </button>
+            </div>
+          </Link>
+
+          {/* Yearly Plan - Recommended */}
+          <Link href="/templates?billing=yearly" className="group">
+            <div className="bg-white rounded-2xl border-2 border-green-500 p-8 transition-all hover:shadow-xl hover:-translate-y-1 relative animate-scale-in opacity-0 delay-200">
+              {/* Recommended Badge */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <span className="inline-flex items-center px-4 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-full shadow-lg">
+                  💰 Paling Hemat
+                </span>
+              </div>
+
+              <div className="mb-6 mt-2">
+                <h2 className="text-title mb-3">
+                  Paket Tahunan
+                </h2>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-5xl font-bold text-green-600">
+                    Rp300.000
+                  </span>
+                  <span className="text-body text-neutral-500">/tahun</span>
+                </div>
+                <p className="text-body-small text-green-600 font-semibold">
+                  Hanya Rp25.000/bulan · Hemat Rp168.000!
+                </p>
+              </div>
+
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                    <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-body text-neutral-700">Semua fitur paket bulanan</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                    <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-body text-neutral-700 font-semibold">Hemat 36% dari paket bulanan</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                    <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-body text-neutral-700">Bayar sekali untuk 12 bulan</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                    <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-body text-neutral-700">Tanpa khawatir perpanjangan bulanan</span>
+                </li>
+              </ul>
+
+              <button className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-3.5 rounded-xl font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg">
+                Pilih Paket Tahunan
               </button>
             </div>
           </Link>
         </div>
 
-        <div className="text-center mt-8">
-          <p className="text-gray-600">
-            Bisa diubah atau upgrade melalui WhatsApp setelah mendaftar
+        {/* Footer Note */}
+        <div className="text-center animate-fade-in opacity-0 delay-300">
+          <p className="text-body-small text-neutral-500 mb-2">
+            💬 Butuh paket custom atau enterprise?
           </p>
+          <a
+            href="https://wa.me/628123456789"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-body-small text-primary-600 hover:text-primary-700 font-semibold hover:underline"
+          >
+            Hubungi kami via WhatsApp
+          </a>
         </div>
       </div>
     </div>

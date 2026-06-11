@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* Design System - Modern SaaS Light */
-:root {
+@theme {
   /* Healthcare-appropriate palette */
   --color-primary-50: #f0f9ff;
   --color-primary-100: #e0f2fe;
@@ -35,21 +35,6 @@
   --color-neutral-700: #404040;
   --color-neutral-800: #262626;
   --color-neutral-900: #171717;
-
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  /* Font family */
-  --font-jakarta: var(--font-jakarta);
-
-  /* Colors */
-  --color-primary-*: initial;
-  --color-accent-*: initial;
-  --color-neutral-*: initial;
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
 
   /* Spacing scale - generous */
   --spacing-xs: 0.5rem;
