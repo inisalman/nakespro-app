@@ -31,5 +31,5 @@ export default async function FormPage({
     redirect(`/payment/${orderId}`);
   }
 
-  return <FormClient orderId={order.id} />;
+  return <div className="w-full flex-1"><FormClient orderId={order.id} /></div>;
 }

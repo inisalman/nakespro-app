@@ -41,17 +41,19 @@ export default async function PaymentPage({
   const templateName = TEMPLATE_NAMES[order.templateId] || order.templateId;
 
   return (
-    <PaymentClient
-      order={{
-        id: order.id,
-        templateId: order.templateId,
-        templateName,
-        billingCycle: order.billingCycle,
-        baseAmount: order.baseAmount,
-        uniqueCode: order.uniqueCode,
-        totalAmount: order.totalAmount,
-        paymentStatus: order.paymentStatus,
-      }}
-    />
+    <div className="w-full flex-1">
+      <PaymentClient
+        order={{
+          id: order.id,
+          templateId: order.templateId,
+          templateName,
+          billingCycle: order.billingCycle,
+          baseAmount: order.baseAmount,
+          uniqueCode: order.uniqueCode,
+          totalAmount: order.totalAmount,
+          paymentStatus: order.paymentStatus,
+        }}
+      />
+    </div>
   );
 }

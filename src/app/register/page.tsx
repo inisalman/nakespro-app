@@ -11,7 +11,7 @@ export default async function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="w-full flex-1 min-h-screen bg-neutral-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12 animate-fade-in-up opacity-0">

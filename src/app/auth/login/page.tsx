@@ -13,7 +13,7 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-2">
+    <div className="w-full flex-1 grid lg:grid-cols-2 min-h-screen">
       {/* Left Panel - Bold Hero with Gradient */}
       <div className="relative gradient-hero overflow-hidden flex items-center justify-center p-6 sm:p-8 lg:p-16">
         {/* Decorative geometric shapes */}
@@ -24,7 +24,7 @@ export default async function LoginPage() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 max-w-xl text-white">
+        <div className="relative z-10 w-full max-w-xl text-white">
           <div className="animate-fade-in-up opacity-0">
             <div className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
               Platform Website Builder #1 untuk Nakes
@@ -82,7 +82,7 @@ export default async function LoginPage() {
       </div>
 
       {/* Right Panel - Clean Form Area */}
-      <div className="flex items-center justify-center p-6 sm:p-8 lg:p-16 bg-white">
+      <div className="flex items-center justify-center p-6 sm:p-8 lg:p-16 bg-white w-full">
         <div className="w-full max-w-md">
           <div className="animate-scale-in opacity-0 delay-200">
             <Link

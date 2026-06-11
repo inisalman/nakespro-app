@@ -12,13 +12,13 @@ export default async function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="w-full flex-1 min-h-screen bg-neutral-50">
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         {/* Gradient Background */}
         <div className="absolute inset-0 gradient-hero opacity-10"></div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
           <div className="text-center animate-fade-in-up opacity-0">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-primary-50 rounded-full text-xs sm:text-sm font-semibold text-primary-700 mb-4 sm:mb-6">
               <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,7 +65,7 @@ export default async function Home() {
       </div>
 
       {/* Features Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
           <div className="bg-white rounded-2xl border-2 border-neutral-200 p-6 sm:p-8 hover:border-primary-500 transition-all hover:-translate-y-1 animate-scale-in opacity-0 delay-200">
             <div className="w-12 h-12 sm:w-14 sm:h-14 bg-primary-100 rounded-xl flex items-center justify-center mb-4 sm:mb-6">
@@ -106,7 +106,7 @@ export default async function Home() {
       </div>
 
       {/* CTA Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-24">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-24">
         <div className="bg-white rounded-3xl border-2 border-neutral-200 p-8 sm:p-12 text-center animate-scale-in opacity-0 delay-500">
           <h2 className="text-headline mb-3 sm:mb-4">Siap Memulai?</h2>
           <p className="text-body-large text-neutral-600 mb-6 sm:mb-8 max-w-2xl mx-auto">

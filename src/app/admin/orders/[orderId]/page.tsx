@@ -33,7 +33,7 @@ export default async function AdminOrderDetailPage({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
+    <div className="w-full flex-1 min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
       <div className="max-w-5xl mx-auto">
         <div className="mb-6">
           <Link
