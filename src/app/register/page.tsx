@@ -12,28 +12,28 @@ export default async function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Header */}
-        <div className="text-center mb-12 animate-fade-in-up opacity-0">
-          <h1 className="text-display mb-4">
+        <div className="text-center mb-8 sm:mb-12 animate-fade-in-up opacity-0">
+          <h1 className="text-display mb-3 sm:mb-4">
             Pilih Paket Anda
           </h1>
-          <p className="text-body-large text-neutral-600">
+          <p className="text-body-large text-neutral-600 px-4">
             Website profesional untuk tenaga kesehatan, mulai dari Rp25.000/bulan
           </p>
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
           {/* Monthly Plan */}
           <Link href="/templates?billing=monthly" className="group">
-            <div className="bg-white rounded-2xl border-2 border-neutral-200 hover:border-primary-500 p-8 transition-all hover:shadow-xl hover:-translate-y-1 animate-scale-in opacity-0 delay-100">
-              <div className="mb-6">
-                <h2 className="text-title mb-3">
+            <div className="bg-white rounded-2xl border-2 border-neutral-200 hover:border-primary-500 p-6 sm:p-8 transition-all hover:shadow-xl hover:-translate-y-1 animate-scale-in opacity-0 delay-100">
+              <div className="mb-4 sm:mb-6">
+                <h2 className="text-title mb-2 sm:mb-3">
                   Paket Bulanan
                 </h2>
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-5xl font-bold text-neutral-900">
+                  <span className="text-4xl sm:text-5xl font-bold text-neutral-900">
                     Rp39.000
                   </span>
                   <span className="text-body text-neutral-500">/bulan</span>
@@ -43,7 +43,7 @@ export default async function RegisterPage() {
                 </p>
               </div>
 
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                 <li className="flex items-start gap-3">
                   <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
                     <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
@@ -86,20 +86,20 @@ export default async function RegisterPage() {
 
           {/* Yearly Plan - Recommended */}
           <Link href="/templates?billing=yearly" className="group">
-            <div className="bg-white rounded-2xl border-2 border-green-500 p-8 transition-all hover:shadow-xl hover:-translate-y-1 relative animate-scale-in opacity-0 delay-200">
+            <div className="bg-white rounded-2xl border-2 border-green-500 p-6 sm:p-8 transition-all hover:shadow-xl hover:-translate-y-1 relative animate-scale-in opacity-0 delay-200">
               {/* Recommended Badge */}
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="inline-flex items-center px-4 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-full shadow-lg">
+                <span className="inline-flex items-center px-3 sm:px-4 py-1 sm:py-1.5 bg-green-500 text-white text-xs sm:text-sm font-semibold rounded-full shadow-lg whitespace-nowrap">
                   💰 Paling Hemat
                 </span>
               </div>
 
-              <div className="mb-6 mt-2">
-                <h2 className="text-title mb-3">
+              <div className="mb-4 sm:mb-6 mt-2">
+                <h2 className="text-title mb-2 sm:mb-3">
                   Paket Tahunan
                 </h2>
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-5xl font-bold text-green-600">
+                  <span className="text-4xl sm:text-5xl font-bold text-green-600">
                     Rp300.000
                   </span>
                   <span className="text-body text-neutral-500">/tahun</span>
@@ -109,7 +109,7 @@ export default async function RegisterPage() {
                 </p>
               </div>
 
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                 <li className="flex items-start gap-3">
                   <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
                     <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">

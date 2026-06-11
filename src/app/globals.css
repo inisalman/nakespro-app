@@ -70,56 +70,70 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Typography scale */
+/* Typography scale - Responsive */
 .text-display {
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(1.75rem, 5vw + 1rem, 4rem);
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.15;
   letter-spacing: -0.02em;
+  word-spacing: normal;
 }
 
 .text-headline {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.5rem, 4vw + 0.5rem, 3rem);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.25;
   letter-spacing: -0.01em;
+  word-spacing: normal;
 }
 
 .text-title {
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1.125rem, 2.5vw + 0.5rem, 2rem);
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.35;
+  word-spacing: normal;
 }
 
 .text-body-large {
-  font-size: 1.125rem;
+  font-size: clamp(0.9375rem, 1vw + 0.5rem, 1.125rem);
   font-weight: 400;
-  line-height: 1.7;
+  line-height: 1.6;
+  word-spacing: normal;
 }
 
 .text-body {
-  font-size: 1rem;
+  font-size: clamp(0.875rem, 0.5vw + 0.5rem, 1rem);
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.55;
+  word-spacing: normal;
 }
 
 .text-body-small {
-  font-size: 0.875rem;
+  font-size: clamp(0.8125rem, 0.25vw + 0.5rem, 0.875rem);
   font-weight: 400;
   line-height: 1.5;
+  word-spacing: normal;
 }
 
-/* Button styles */
+/* Button styles - Responsive */
 .btn-primary {
   background: var(--color-neutral-900);
   color: white;
-  padding: 0.875rem 2rem;
+  padding: 0.75rem 1.5rem;
   border-radius: var(--radius-lg);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
   cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .btn-primary {
+    padding: 0.875rem 2rem;
+  }
 }
 
 .btn-primary:hover {
@@ -131,13 +145,21 @@ body {
 .btn-secondary {
   background: white;
   color: var(--color-neutral-900);
-  padding: 0.875rem 2rem;
+  padding: 0.75rem 1.5rem;
   border-radius: var(--radius-lg);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: 2px solid var(--color-neutral-200);
   cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .btn-secondary {
+    padding: 0.875rem 2rem;
+  }
 }
 
 .btn-secondary:hover {
