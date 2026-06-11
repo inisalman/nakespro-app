@@ -20,9 +20,14 @@ export default function Navbar({ user, isAdmin }: NavbarProps) {
     return null;
   }
 
+  // Hide navbar on dashboard pages (dashboard has its own sidebar navigation)
+  if (pathname.startsWith("/dashboard")) {
+    return null;
+  }
+
   const handleLogout = async () => {
     await signOut();
-    router.push("/");
+    router.push("/auth/login");
     router.refresh();
   };
 
@@ -31,7 +36,7 @@ export default function Navbar({ user, isAdmin }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center gap-8">
-            <Link href="/" className="text-xl font-bold text-neutral-900">
+            <Link href="/dashboard" className="text-xl font-bold text-neutral-900">
               NakesPro
             </Link>
 

@@ -15,7 +15,7 @@ export function AuthTest({ user, isAdmin }: AuthTestProps) {
   const handleSignIn = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/",
+      callbackURL: "/dashboard",
     });
   };
 
@@ -23,7 +23,7 @@ export function AuthTest({ user, isAdmin }: AuthTestProps) {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          window.location.href = "/";
+          window.location.href = "/auth/login";
         },
       },
     });

@@ -158,17 +158,18 @@ export default function PaymentClient({ order }: PaymentClientProps) {
             <div className="bg-white rounded-2xl border-2 border-neutral-200 p-8">
               <h3 className="text-title text-center mb-6">Scan QRIS</h3>
               <div className="flex justify-center mb-4">
-                <div className="w-72 h-72 bg-neutral-100 rounded-2xl flex items-center justify-center border-2 border-neutral-200">
-                  <div className="text-center">
-                    <svg className="w-16 h-16 text-neutral-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-                    </svg>
-                    <p className="text-body-small text-neutral-500 font-medium">QRIS Static</p>
-                    <p className="text-body-small text-neutral-400">[Placeholder MVP]</p>
-                  </div>
+                <div className="w-full max-w-[300px] bg-neutral-50 rounded-2xl flex items-center justify-center border-2 border-neutral-200 overflow-hidden shadow-sm">
+                  <img
+                    src="/images/qris.jpeg"
+                    alt="QRIS Nakespro"
+                    className="w-full h-auto object-contain"
+                  />
                 </div>
               </div>
-              <p className="text-center text-body-small text-neutral-500">
+              <p className="text-center text-body-small text-neutral-600 font-medium mt-6">
+                a.n NAKESPRO.ID, KOMPUTER & SOFTWARE
+              </p>
+              <p className="text-center text-body-small text-neutral-500 mt-1">
                 Gunakan aplikasi mobile banking atau e-wallet Anda
               </p>
             </div>

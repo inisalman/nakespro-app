@@ -85,15 +85,15 @@ export default async function LoginPage() {
       <div className="flex items-center justify-center p-6 sm:p-8 lg:p-16 bg-white w-full">
         <div className="w-full max-w-md">
           <div className="animate-scale-in opacity-0 delay-200">
-            <Link
-              href="/"
+            <a
+              href="https://nakespro.id"
               className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors mb-6 sm:mb-8"
             >
               <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
               <span className="text-xs sm:text-sm font-medium">Kembali ke Beranda</span>
-            </Link>
+            </a>
 
             <div className="mb-8 sm:mb-10">
               <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3">
