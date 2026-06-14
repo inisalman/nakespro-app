@@ -7,10 +7,19 @@ import { redirect } from "next/navigation";
 
 const TEMPLATES = [
   "modern-light",
-  "modern-dark",
-  "playful-geometry",
+  "clean-medical",
   "calm-warm",
+  "friendly-care",
 ] as const;
+
+// Palette default tiap template (id preset default di repo nakespro-template).
+// Untuk MVP, client memilih template; palette diisi otomatis dari default ini.
+const DEFAULT_PALETTE: Record<(typeof TEMPLATES)[number], string> = {
+  "modern-light": "neutral",
+  "clean-medical": "bright-health",
+  "calm-warm": "terracotta",
+  "friendly-care": "sunny",
+};
 
 export async function selectTemplate(
   templateId: string,
@@ -45,6 +54,7 @@ export async function selectTemplate(
       userId: session.user.id,
       packageType: "hemat",
       templateId,
+      palette: DEFAULT_PALETTE[templateId as (typeof TEMPLATES)[number]],
       billingCycle,
       baseAmount,
       uniqueCode,

@@ -11,7 +11,7 @@ export async function submitWebsiteForm(
   orderId: string,
   formData: {
     websiteName: string;
-    description?: string;
+    description: string;
     serviceType: "nakes" | "homecare" | "both";
     waNumber: string;
     practiceHours?: string;

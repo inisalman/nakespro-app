@@ -77,7 +77,6 @@ model Order {
 
   packageType     String    @default("hemat")
   templateId      String
-  palette         String?
 
   billingCycle    String
   baseAmount      Int
@@ -118,6 +117,7 @@ model OrderPhoto {
   orderId   String
   order     Order    @relation(fields: [orderId], references: [id])
 
+  category  String
   url       String
   caption   String?
 

@@ -38,6 +38,10 @@ export default function FormClient({ orderId }: FormClientProps) {
       setError("Nama website minimal 3 karakter");
       return false;
     }
+    if (!formData.description || formData.description.trim().length < 1) {
+      setError("Deskripsi singkat wajib diisi");
+      return false;
+    }
     if (!formData.serviceType) {
       setError("Pilih tipe layanan");
       return false;
@@ -78,7 +82,7 @@ export default function FormClient({ orderId }: FormClientProps) {
     try {
       const result = await submitWebsiteForm(orderId, {
         websiteName: formData.websiteName,
-        description: formData.description || undefined,
+        description: formData.description,
         serviceType: formData.serviceType as "nakes" | "homecare" | "both",
         waNumber: formData.waNumber,
         practiceHours: formData.practiceHours || undefined,
@@ -190,7 +194,7 @@ export default function FormClient({ orderId }: FormClientProps) {
 
               <div>
                 <label className="block text-body font-semibold text-neutral-900 mb-2">
-                  Deskripsi Singkat
+                  Deskripsi Singkat <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   name="description"
@@ -267,7 +271,7 @@ export default function FormClient({ orderId }: FormClientProps) {
                   onChange={handleChange}
                   placeholder="Contoh: Senin-Sabtu, 08:00-17:00"
                   className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors text-body"
-                  maxLength={100}
+                  maxLength={200}
                 />
               </div>
 

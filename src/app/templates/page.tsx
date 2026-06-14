@@ -14,18 +14,18 @@ const TEMPLATES = [
     borderColor: "border-blue-200",
   },
   {
-    id: "modern-dark",
-    name: "Modern Dark",
-    character: "Elegan, gelap, premium",
-    description: "Cocok untuk layanan premium, homecare eksklusif",
-    color: "bg-slate-900",
-    borderColor: "border-slate-700",
+    id: "clean-medical",
+    name: "Clean Medical",
+    character: "Klinis, rapi, tepercaya",
+    description: "Cocok untuk fisioterapi, rehabilitasi, klinik medis",
+    color: "bg-cyan-50",
+    borderColor: "border-cyan-200",
   },
   {
-    id: "playful-geometry",
-    name: "Playful Geometry",
-    character: "Ceria, bentuk geometris, warna berani",
-    description: "Cocok untuk layanan anak, fisioterapi, wellness",
+    id: "friendly-care",
+    name: "Friendly Care",
+    character: "Ceria, hangat, ramah keluarga",
+    description: "Cocok untuk bidan, perawatan ibu & anak, laktasi",
     color: "bg-purple-50",
     borderColor: "border-purple-200",
   },
@@ -101,12 +101,12 @@ export default function TemplatesPage() {
               <div className={`w-full h-56 ${template.color} rounded-xl mb-6 flex items-center justify-center border-2 ${template.borderColor} overflow-hidden relative group`}>
                 <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/30"></div>
                 <div className="relative text-center z-10">
-                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-3 ${template.id === "modern-dark" ? "bg-white/20" : "bg-black/5"}`}>
-                    <svg className={`w-8 h-8 ${template.id === "modern-dark" ? "text-white" : "text-neutral-600"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-3 bg-black/5">
+                    <svg className="w-8 h-8 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                   </div>
-                  <div className={`text-sm font-semibold ${template.id === "modern-dark" ? "text-white" : "text-neutral-700"}`}>
+                  <div className="text-sm font-semibold text-neutral-700">
                     {template.name}
                   </div>
                 </div>
