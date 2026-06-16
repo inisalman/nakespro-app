@@ -2,45 +2,82 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Check, Lock, ArrowRight, MessageCircle } from "lucide-react";
 
 type Billing = "monthly" | "yearly";
 
 const PLANS: Record<
-  Billing,
+  string,
   {
     label: string;
-    price: number;
-    period: string;
-    perMonth: string;
-    note: string;
+    tagline: string;
+    monthlyPrice: number;
+    yearlyPrice: number;
+    monthlyNote: string;
+    yearlyNote: string;
     features: string[];
+    highlight?: boolean;
+    badge?: string | null;
+    ctaTarget?: string;
+    ctaLabel?: string;
   }
 > = {
-  monthly: {
-    label: "Paket Bulanan",
-    price: 39000,
-    period: "per bulan",
-    perMonth: "Ditagih setiap bulan",
-    note: "Fleksibel, bisa berhenti kapan saja",
+  starter: {
+    label: "Paket Starter",
+    tagline: "Awali perjalanan digital praktik Anda",
+    monthlyPrice: 49000,
+    yearlyPrice: 300000,
+    monthlyNote: "Ditagih bulanan",
+    yearlyNote: "Ditagih Rp300.000/tahun",
     features: [
-      "4 template profesional pilihan",
-      "Domain gratis *.nakespro.id",
-      "Live dalam 2-3 hari kerja",
-      "Responsive di semua perangkat",
+      "Gratis domain .nakespro.id",
+      "Pantau performa lewat dashboard dan analitik pengunjung",
+      "Website rampung dalam 1-3 hari, semua kami yang urus",
+      "Sudah termasuk hosting dan server, tanpa biaya tambahan",
+      "Tampil sempurna di layar HP, tablet, hingga laptop",
     ],
   },
-  yearly: {
-    label: "Paket Tahunan",
-    price: 300000,
-    period: "per tahun",
-    perMonth: "Setara Rp25.000/bulan",
-    note: "Hemat Rp168.000 dibanding bulanan",
+  advance: {
+    label: "Paket Advance",
+    tagline: "Tampil maksimal dan dipercaya pasien",
+    monthlyPrice: 150000,
+    yearlyPrice: 999999,
+    monthlyNote: "Ditagih bulanan",
+    yearlyNote: "Ditagih Rp999.999/tahun",
+    highlight: true,
+    badge: "Rekomendasi",
     features: [
-      "Semua fitur paket bulanan",
-      "Hemat 36% dari paket bulanan",
-      "Bayar sekali untuk 12 bulan",
-      "Tanpa khawatir perpanjangan",
+      "Tambahan domain gratis hingga .com untuk paket tahunan",
+      "Optimasi SEO agar praktik Anda mudah ditemukan di Google",
+      "Terhubung Google Maps & Google Bisnis untuk jangkauan lokal",
+      "Booking online, pasien bisa pesan jadwal langsung dari website",
+      "Buka seluruh fitur dashboard tanpa batasan",
+      "Rekam dan tinjau riwayat tindakan pasien secara detail",
+      "Invoice terkirim otomatis ke WhatsApp pasien",
+      "Desain website dirancang sesuai identitas brand Anda",
+      "Didampingi langsung oleh tim ahli kami dari awal",
     ],
+  },
+  professional: {
+    label: "Paket Professional",
+    tagline: "Fitur tanpa batas untuk praktik yang bertumbuh",
+    monthlyPrice: 0,
+    yearlyPrice: 3500000,
+    monthlyNote: "Hanya tersedia tahunan",
+    yearlyNote: "Ditagih Rp3.500.000/tahun",
+    features: [
+      "Semua yang ada di Advance, plus bonus domain .id eksklusif",
+      "Revisi desain tidak dibatasi demi hasil yang sempurna",
+      "Pengelolaan multi-website untuk banyak cabang praktik",
+      "SEO tingkat lanjut & laporan performa bulanan",
+      "Integrasi WhatsApp Business & chat otomatis ke pasien",
+      "Halaman & layanan tanpa batas untuk kebutuhan apa pun",
+      "Akses tim untuk kelola website bersama (multi-admin)",
+      "Manajer akun khusus yang siap mendampingi Anda",
+      "Prioritas utama untuk bantuan teknis & jaminan uptime",
+    ],
+    ctaTarget: "https://wa.me/628568461024?text=Halo%20NakesPro.id,%20saya%20ingin%20tanya%20soal%20paket%20Professional",
+    ctaLabel: "Diskusi via WhatsApp",
   },
 };
 
@@ -50,197 +87,242 @@ function formatRupiah(value: number) {
 
 export default function RegisterClient({ userEmail }: { userEmail: string }) {
   const [billing, setBilling] = useState<Billing>("yearly");
-  const plan = PLANS[billing];
+  const [selectedPlanId, setSelectedPlanId] = useState<string>("advance");
+  const plan = PLANS[selectedPlanId];
+
+  const displayPrice = billing === "yearly" ? plan.yearlyPrice : plan.monthlyPrice;
+  const displayPeriod = billing === "yearly" ? "/tahun" : "/bulan";
+  const displayNote = billing === "yearly" ? plan.yearlyNote : plan.monthlyNote;
 
   return (
     <div className="min-h-screen w-full lg:grid lg:grid-cols-[1fr_1.1fr]">
-      {/* Left panel - branded summary (Stripe style) */}
+      {/* Left panel - branded summary */}
       <aside className="relative flex flex-col bg-neutral-900 px-6 py-10 sm:px-10 lg:px-12 lg:py-16 text-white overflow-hidden">
-        {/* Decorative gradient */}
+        {/* Decorative gradients */}
         <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary-600/30 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-accent-600/20 blur-3xl" />
 
-        <div className="relative z-10 mx-auto w-full max-w-md lg:mx-0">
+        <div className="relative z-10 mx-auto flex h-full w-full max-w-md flex-col lg:mx-0">
           {/* Brand */}
-          <Link href="/" className="inline-flex items-center gap-2 mb-12">
+          <Link href="/" className="inline-flex items-center gap-2 mb-10">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white">
               <span className="text-sm font-bold text-neutral-900">N</span>
             </div>
             <span className="text-base font-semibold tracking-tight">Nakespro</span>
           </Link>
 
-          {/* Plan name + price */}
-          <p className="text-sm text-neutral-400 mb-2">Berlangganan {plan.label}</p>
-          <div className="flex items-end gap-2 mb-1">
-            <span className="text-5xl font-bold tracking-tight">
-              {formatRupiah(plan.price)}
-            </span>
-            <span className="mb-2 text-sm text-neutral-400">{plan.period}</span>
+          {/* Plan summary */}
+          <div className="mb-8">
+            <p className="text-xs font-medium uppercase tracking-wider text-neutral-400 mb-3">
+              Ringkasan pesanan
+            </p>
+            <h2 className="text-lg font-semibold text-white mb-1">{plan.label}</h2>
+            <p className="text-sm text-neutral-400">{plan.tagline}</p>
           </div>
-          <p className="text-sm text-neutral-400 mb-10">{plan.perMonth}</p>
 
-          {/* Line items */}
-          <div className="space-y-4 border-t border-white/10 pt-6">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-sm font-medium text-white">{plan.label}</p>
-                <p className="text-xs text-neutral-400">Website profesional tenaga kesehatan</p>
-              </div>
-              <span className="text-sm font-medium text-white whitespace-nowrap">
-                {formatRupiah(plan.price)}
+          {/* Price display */}
+          <div className="rounded-xl border border-white/10 bg-white/5 p-6 mb-8">
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-bold tracking-tight text-white">
+                {selectedPlanId === "professional" && billing === "monthly"
+                  ? "-"
+                  : formatRupiah(displayPrice)}
               </span>
+              {!(selectedPlanId === "professional" && billing === "monthly") && (
+                <span className="text-sm text-neutral-400">{displayPeriod}</span>
+              )}
             </div>
-
-            <div className="flex items-center justify-between gap-4 border-t border-white/10 pt-4">
-              <span className="text-sm text-neutral-400">Subtotal</span>
-              <span className="text-sm text-neutral-200">{formatRupiah(plan.price)}</span>
-            </div>
-            <div className="flex items-center justify-between gap-4 border-t border-white/10 pt-4">
-              <span className="text-base font-semibold text-white">Total jatuh tempo</span>
-              <span className="text-base font-semibold text-white">{formatRupiah(plan.price)}</span>
-            </div>
+            <p className="mt-2 text-sm text-neutral-400">{displayNote}</p>
+            {billing === "yearly" && selectedPlanId !== "professional" && (
+              <p className="mt-1 text-xs font-medium text-green-400">
+                Hemat dibanding bayar bulanan
+              </p>
+            )}
           </div>
 
           {/* Features */}
-          <ul className="mt-10 space-y-3">
-            {plan.features.map((feature) => (
-              <li key={feature} className="flex items-start gap-3">
-                <svg
-                  className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="text-sm text-neutral-300">{feature}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="flex-1">
+            <p className="text-xs font-medium uppercase tracking-wider text-neutral-400 mb-4">
+              Yang Anda dapatkan
+            </p>
+            <ul className="space-y-3">
+              {plan.features.slice(0, 5).map((feature) => (
+                <li key={feature} className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary-600/20">
+                    <Check className="h-3 w-3 text-primary-400" strokeWidth={3} />
+                  </span>
+                  <span className="text-sm leading-relaxed text-neutral-300">{feature}</span>
+                </li>
+              ))}
+              {plan.features.length > 5 && (
+                <li className="pl-8 text-xs text-neutral-500">
+                  +{plan.features.length - 5} fitur lainnya
+                </li>
+              )}
+            </ul>
+          </div>
 
           {/* Footer */}
-          <div className="mt-12 hidden lg:block">
-            <p className="text-xs text-neutral-500">
-              Pembayaran aman via QRIS. Butuh paket custom?{" "}
-              <a
-                href="https://wa.me/628123456789"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral-300 underline underline-offset-2 hover:text-white"
-              >
-                Hubungi kami
-              </a>
-            </p>
+          <div className="mt-8 pt-6 border-t border-white/10">
+            <div className="flex items-center gap-2 text-xs text-neutral-500">
+              <Lock className="h-3.5 w-3.5" />
+              <span>Pembayaran aman via QRIS</span>
+            </div>
           </div>
         </div>
       </aside>
 
-      {/* Right panel - plan selection + action */}
+      {/* Right panel - plan selection */}
       <main className="flex flex-col bg-white px-6 py-10 sm:px-10 lg:px-16 lg:py-16">
-        <div className="mx-auto w-full max-w-md">
-          {/* Account */}
+        <div className="mx-auto w-full max-w-lg">
+          {/* Header */}
           <div className="mb-8">
             <h1 className="text-2xl font-bold tracking-tight text-neutral-900">
               Pilih paket berlangganan
             </h1>
             <p className="mt-2 text-sm text-neutral-500">
-              Masuk sebagai <span className="font-medium text-neutral-700">{userEmail}</span>
+              Masuk sebagai{" "}
+              <span className="font-medium text-neutral-700">{userEmail}</span>
             </p>
           </div>
 
           {/* Billing toggle */}
-          <div className="mb-6 inline-flex w-full rounded-xl bg-neutral-100 p-1">
-            {(["monthly", "yearly"] as Billing[]).map((key) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setBilling(key)}
-                className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
-                  billing === key
-                    ? "bg-white text-neutral-900 shadow-sm"
-                    : "text-neutral-500 hover:text-neutral-700"
-                }`}
-              >
-                {key === "monthly" ? "Bulanan" : "Tahunan"}
-                {key === "yearly" && (
-                  <span className="ml-1.5 text-xs font-semibold text-green-600">-36%</span>
-                )}
-              </button>
-            ))}
-          </div>
-
-          {/* Plan cards */}
-          <div className="space-y-3">
-            {(["yearly", "monthly"] as Billing[]).map((key) => {
-              const p = PLANS[key];
-              const active = billing === key;
-              return (
+          <div className="mb-8">
+            <div className="inline-flex w-full rounded-xl bg-neutral-100 p-1">
+              {(["monthly", "yearly"] as Billing[]).map((key) => (
                 <button
                   key={key}
                   type="button"
-                  onClick={() => setBilling(key)}
-                  className={`w-full rounded-xl border-2 p-5 text-left transition-all ${
-                    active
-                      ? "border-neutral-900 bg-neutral-50"
-                      : "border-neutral-200 hover:border-neutral-300"
+                  onClick={() => {
+                    setBilling(key);
+                    if (key === "monthly" && selectedPlanId === "professional") {
+                      setSelectedPlanId("advance");
+                    }
+                  }}
+                  className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all ${
+                    billing === key
+                      ? "bg-white text-neutral-900 shadow-sm"
+                      : "text-neutral-500 hover:text-neutral-700"
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <span
-                        className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${
-                          active ? "border-neutral-900" : "border-neutral-300"
-                        }`}
-                      >
-                        {active && <span className="h-2.5 w-2.5 rounded-full bg-neutral-900" />}
+                  {key === "monthly" ? "Bulanan" : "Tahunan"}
+                  {key === "yearly" && (
+                    <span className="ml-1.5 inline-flex items-center rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-bold text-green-700">
+                      HEMAT
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Plan cards */}
+          <div className="space-y-3 mb-8">
+            {Object.entries(PLANS)
+              .filter(([key]) => !(billing === "monthly" && key === "professional"))
+              .map(([key, p]) => {
+                const active = selectedPlanId === key;
+                const price = billing === "yearly" ? p.yearlyPrice : p.monthlyPrice;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setSelectedPlanId(key)}
+                    className={`group relative w-full rounded-xl border-2 p-5 text-left transition-all ${
+                      active
+                        ? "border-neutral-900 bg-neutral-50 shadow-sm"
+                        : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50/50"
+                    }`}
+                  >
+                    {/* Badge */}
+                    {p.badge && (
+                      <span className="absolute -top-2.5 right-4 rounded-full bg-neutral-900 px-2.5 py-0.5 text-[10px] font-bold text-white">
+                        {p.badge}
                       </span>
-                      <div>
-                        <p className="text-sm font-semibold text-neutral-900">{p.label}</p>
-                        <p className="text-xs text-neutral-500">{p.note}</p>
+                    )}
+
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        {/* Radio */}
+                        <span
+                          className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                            active ? "border-neutral-900 bg-neutral-900" : "border-neutral-300"
+                          }`}
+                        >
+                          {active && (
+                            <span className="h-2 w-2 rounded-full bg-white" />
+                          )}
+                        </span>
+                        {/* Plan info */}
+                        <div>
+                          <p className="text-sm font-semibold text-neutral-900">
+                            {p.label}
+                          </p>
+                          <p className="mt-0.5 text-xs text-neutral-500">{p.tagline}</p>
+                        </div>
+                      </div>
+                      {/* Price */}
+                      <div className="text-right flex-shrink-0">
+                        <p className="text-sm font-bold text-neutral-900">
+                          {key === "professional" && billing === "monthly"
+                            ? "-"
+                            : formatRupiah(price)}
+                        </p>
+                        <p className="text-xs text-neutral-500">
+                          {key === "professional" && billing === "monthly"
+                            ? "Hanya tahunan"
+                            : billing === "yearly"
+                              ? "/tahun"
+                              : "/bulan"}
+                        </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm font-bold text-neutral-900">{formatRupiah(p.price)}</p>
-                      <p className="text-xs text-neutral-500">{p.period}</p>
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })}
           </div>
 
           {/* CTA */}
-          <Link
-            href={`/templates?billing=${billing}`}
-            className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-neutral-900 px-6 py-3.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-neutral-800 hover:shadow-lg"
-          >
-            Lanjut pilih template
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </Link>
-
-          {/* Trust note */}
-          <div className="mt-6 flex items-center justify-center gap-2 text-xs text-neutral-400">
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-            <span>Pembayaran aman & terenkripsi via QRIS</span>
-          </div>
-
-          {/* Mobile WA */}
-          <p className="mt-8 text-center text-xs text-neutral-500 lg:hidden">
-            Butuh paket custom?{" "}
+          {selectedPlanId === "professional" ? (
             <a
-              href="https://wa.me/628123456789"
+              href={plan.ctaTarget}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-semibold text-primary-600 hover:underline"
+              className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-neutral-900 px-6 py-4 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-neutral-800 hover:shadow-lg active:translate-y-0"
             >
-              Hubungi kami
+              <MessageCircle className="h-4 w-4" />
+              {plan.ctaLabel}
+            </a>
+          ) : (
+            <Link
+              href={`/templates?billing=${billing}&plan=${selectedPlanId}`}
+              className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-neutral-900 px-6 py-4 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-neutral-800 hover:shadow-lg active:translate-y-0"
+            >
+              Lanjut pilih template
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          )}
+
+          {/* Trust indicators */}
+          <div className="mt-6 flex items-center justify-center gap-4 text-xs text-neutral-400">
+            <div className="flex items-center gap-1.5">
+              <Lock className="h-3.5 w-3.5" />
+              <span>Aman & terenkripsi</span>
+            </div>
+            <span className="text-neutral-200">•</span>
+            <span>QRIS & Transfer</span>
+          </div>
+
+          {/* Help link */}
+          <p className="mt-8 text-center text-xs text-neutral-500">
+            Butuh bantuan memilih?{" "}
+            <a
+              href="https://wa.me/628568461024"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-neutral-700 underline underline-offset-2 hover:text-neutral-900"
+            >
+              Chat kami
             </a>
           </p>
         </div>
