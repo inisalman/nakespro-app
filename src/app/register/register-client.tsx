@@ -236,7 +236,7 @@ export default function RegisterClient({ userEmail }: { userEmail: string }) {
                   >
                     {/* Badge */}
                     {p.badge && (
-                      <span className="absolute -top-2.5 right-4 rounded-full bg-neutral-900 px-2.5 py-0.5 text-[10px] font-bold text-white">
+                      <span className="absolute -top-2.5 left-4 rounded-full bg-neutral-900 px-2.5 py-0.5 text-[10px] font-bold text-white">
                         {p.badge}
                       </span>
                     )}
