@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   BarChart2,
@@ -34,7 +34,6 @@ export default function ClientSidebar({
   subscription = { plan: "Pro", status: "Aktif" }
 }: ClientSidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
   // Close sidebar on mobile when route changes
@@ -164,7 +163,7 @@ export default function ClientSidebar({
         <button
           onClick={async () => {
             await signOut();
-            router.push("/");
+            window.location.href = "/";
           }}
           className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 rounded-lg transition-colors"
         >

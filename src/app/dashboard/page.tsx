@@ -34,14 +34,15 @@ export default async function DashboardPage() {
     growthPercentage: 12, // +12%
   };
 
-  // Derive subscription data based on order
+  // Derive subscription data based on order.
+  // Tagihan berikutnya dihitung sejak website live (set saat admin publish).
   const subscriptionEndDate = primaryOrder.nextBillingDate
     ? new Date(primaryOrder.nextBillingDate).toLocaleDateString("id-ID", {
         day: "numeric",
         month: "long",
-        year: "numeric"
+        year: "numeric",
       })
-    : "12 Agustus 2027"; // Fallback dummy as requested if null
+    : null;
 
   const websiteUrl = primaryOrder.websiteUrl || `https://${primaryOrder.subdomain}.nakespro.id`;
 
@@ -141,9 +142,15 @@ export default async function DashboardPage() {
             <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
               <CreditCard className="text-indigo-600" size={20} />
             </div>
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700">
-              Aktif
-            </span>
+            {primaryOrder.isActive ? (
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700">
+                Aktif
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-600">
+                Belum Aktif
+              </span>
+            )}
           </div>
           <div className="mt-auto">
             <p className="text-sm font-medium text-neutral-500 mb-1">Paket {primaryOrder.packageType === "hemat" ? "Starter" : "Profesional"}</p>
@@ -152,9 +159,16 @@ export default async function DashboardPage() {
             </h3>
 
             <div className="flex items-center p-3 bg-neutral-50 rounded-lg border border-neutral-100">
-              <span className="text-sm text-neutral-600">
-                Berakhir pada <strong className="text-neutral-900 font-semibold">{subscriptionEndDate}</strong>
-              </span>
+              {subscriptionEndDate ? (
+                <span className="text-sm text-neutral-600">
+                  Tagihan berikutnya{" "}
+                  <strong className="text-neutral-900 font-semibold">{subscriptionEndDate}</strong>
+                </span>
+              ) : (
+                <span className="text-sm text-neutral-500">
+                  Tagihan dimulai setelah website live
+                </span>
+              )}
             </div>
           </div>
         </div>

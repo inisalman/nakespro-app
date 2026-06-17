@@ -31,5 +31,12 @@ export default async function FormPage({
     redirect(`/payment/${orderId}`);
   }
 
-  return <div className="w-full flex-1"><FormClient orderId={order.id} /></div>;
+  return (
+    <div className="w-full flex-1">
+      <FormClient
+        orderId={order.id}
+        defaultFullName={order.fullName ?? session.user.name ?? ""}
+      />
+    </div>
+  );
 }

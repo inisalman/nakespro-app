@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { signOut } from "@/lib/auth-client";
 
 interface NavbarProps {
@@ -14,7 +14,6 @@ interface NavbarProps {
 
 export default function Navbar({ user, isAdmin }: NavbarProps) {
   const pathname = usePathname();
-  const router = useRouter();
 
   if (!user) {
     return null;
@@ -29,8 +28,7 @@ export default function Navbar({ user, isAdmin }: NavbarProps) {
 
   const handleLogout = async () => {
     await signOut();
-    router.push("/auth/login");
-    router.refresh();
+    window.location.href = "/auth/login";
   };
 
   return (

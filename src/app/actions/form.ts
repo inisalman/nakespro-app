@@ -10,22 +10,22 @@ import { WebsiteFormSchema } from "@/lib/validations";
 export async function submitWebsiteForm(
   orderId: string,
   formData: {
+    fullName: string;
     websiteName: string;
+    subdomain: string;
     description: string;
-    serviceType: "nakes" | "homecare" | "both";
+    serviceTypes: string[];
     waNumber: string;
     practiceHours?: string;
     location?: string;
     googleMaps?: string;
   }
 ) {
-  // Get session
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return { success: false, error: "Unauthorized" };
   }
 
-  // Validate form data
   const validation = WebsiteFormSchema.safeParse(formData);
   if (!validation.success) {
     const firstError = validation.error.issues[0];
@@ -35,7 +35,6 @@ export async function submitWebsiteForm(
     };
   }
 
-  // Fetch order and validate ownership
   const order = await prisma.order.findUnique({
     where: { id: orderId },
   });
@@ -48,13 +47,28 @@ export async function submitWebsiteForm(
     return { success: false, error: "Unauthorized access" };
   }
 
-  // Update order with form data
+  const subdomain = validation.data.subdomain.toLowerCase();
+
+  const subdomainTaken = await prisma.order.findFirst({
+    where: {
+      subdomain,
+      NOT: { id: orderId },
+    },
+    select: { id: true },
+  });
+
+  if (subdomainTaken) {
+    return { success: false, error: "Subdomain sudah digunakan, pilih yang lain" };
+  }
+
   const updatedOrder = await prisma.order.update({
     where: { id: orderId },
     data: {
+      fullName: validation.data.fullName,
       websiteName: validation.data.websiteName,
+      subdomain,
       description: validation.data.description,
-      serviceType: validation.data.serviceType,
+      serviceType: validation.data.serviceTypes.join(", "),
       waNumber: validation.data.waNumber,
       practiceHours: validation.data.practiceHours,
       location: validation.data.location,
@@ -62,11 +76,12 @@ export async function submitWebsiteForm(
     },
   });
 
-  // Send Telegram notification to admin
   await notifyAdmin(`📝 Form Website Disubmit
 
 Order ID: ${orderId}
+Nama: ${updatedOrder.fullName}
 Website: ${updatedOrder.websiteName}
+Subdomain: ${updatedOrder.subdomain}.nakespro.id
 Layanan: ${updatedOrder.serviceType}
 Kontak WA: ${updatedOrder.waNumber}
 Template: ${updatedOrder.templateId}

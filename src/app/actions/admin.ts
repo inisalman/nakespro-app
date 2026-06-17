@@ -109,6 +109,16 @@ Link Admin: https://app.nakespro.id/admin/orders/${orderId}`);
   return { success: true };
 }
 
+function addBillingInterval(from: Date, cycle: string): Date {
+  const next = new Date(from);
+  if (cycle === "yearly") {
+    next.setFullYear(next.getFullYear() + 1);
+  } else {
+    next.setMonth(next.getMonth() + 1);
+  }
+  return next;
+}
+
 export async function publishWebsite(
   orderId: string,
   websiteUrl: string
@@ -138,11 +148,16 @@ export async function publishWebsite(
     };
   }
 
+  const liveAt = new Date();
+  const nextBillingDate = addBillingInterval(liveAt, order.billingCycle);
+
   await prisma.order.update({
     where: { id: orderId },
     data: {
       websiteUrl,
       isActive: true,
+      lastPaidAt: order.lastPaidAt ?? liveAt,
+      nextBillingDate,
     },
   });
 
@@ -152,6 +167,8 @@ Order ID: ${orderId}
 Website: ${order.websiteName}
 URL: ${websiteUrl}
 Client: ${order.user.name} (${order.user.email})
+Siklus: ${order.billingCycle === "yearly" ? "Tahunan" : "Bulanan"}
+Tagihan berikutnya: ${nextBillingDate.toLocaleDateString("id-ID")}
 
 Website sekarang live dan aktif!
 
@@ -159,6 +176,7 @@ Link Admin: https://app.nakespro.id/admin/orders/${orderId}`);
 
   revalidatePath(`/admin/orders/${orderId}`);
   revalidatePath("/admin");
+  revalidatePath("/dashboard");
 
   return { success: true };
 }

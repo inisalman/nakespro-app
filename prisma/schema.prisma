@@ -91,6 +91,7 @@ model Order {
   isActive        Boolean   @default(false)
   suspendedAt     DateTime?
 
+  fullName        String?
   websiteName     String?
   description     String?
   serviceType     String?
