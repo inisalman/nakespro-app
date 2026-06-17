@@ -25,6 +25,8 @@ export default function Navbar({ user, isAdmin }: NavbarProps) {
     return null;
   }
 
+  const isTemplatesPage = pathname.startsWith("/templates");
+
   const handleLogout = async () => {
     await signOut();
     router.push("/auth/login");
@@ -32,7 +34,7 @@ export default function Navbar({ user, isAdmin }: NavbarProps) {
   };
 
   return (
-    <nav className="w-full bg-white border-b border-neutral-200">
+    <nav className={`w-full bg-white border-b border-neutral-200 ${isTemplatesPage ? "hidden sm:block" : ""}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center gap-8">
