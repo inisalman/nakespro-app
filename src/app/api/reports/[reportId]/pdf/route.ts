@@ -35,6 +35,31 @@ export async function GET(
 
   const order = report.user.orders[0] ?? null;
 
+  // Normalisasi items: pastikan selalu array berisi item valid.
+  // Kolom JSON bisa berbentuk tak terduga jika data lama/rusak.
+  const rawItems = Array.isArray(report.items) ? report.items : [];
+  const items: ReportItem[] = rawItems
+    .filter(
+      (it: unknown): it is ReportItem =>
+        typeof it === "object" &&
+        it !== null &&
+        typeof (it as ReportItem).name === "string" &&
+        typeof (it as ReportItem).qty === "number" &&
+        typeof (it as ReportItem).price === "number"
+    )
+    .map((it) => ({
+      name: String(it.name),
+      qty: Number(it.qty) || 1,
+      price: Number(it.price) || 0,
+    }));
+
+  if (items.length === 0) {
+    return NextResponse.json(
+      { error: "Laporan tidak memiliki item biaya" },
+      { status: 400 }
+    );
+  }
+
   const invoiceData: InvoiceData = {
     invoiceNumber: report.invoiceNumber,
     actionDate: report.actionDate,
@@ -42,7 +67,7 @@ export async function GET(
     patientWaNumber: report.patientWaNumber,
     actionType: report.actionType,
     actionDescription: report.actionDescription,
-    items: report.items as unknown as ReportItem[],
+    items,
     notes: report.notes,
     totalAmount: report.totalAmount,
     practitionerName: order?.fullName ?? session.user.name,
@@ -67,9 +92,11 @@ export async function GET(
       },
     });
   } catch (err) {
+    // Sertakan pesan error agar mudah di-debug dari response/network tab.
+    const message = err instanceof Error ? err.message : "Unknown error";
     console.error("PDF generation error:", err);
     return NextResponse.json(
-      { error: "Gagal generate PDF" },
+      { error: `Gagal generate PDF: ${message}` },
       { status: 500 }
     );
   }
