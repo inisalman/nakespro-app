@@ -22,6 +22,7 @@ model User {
   updatedAt     DateTime @updatedAt
 
   orders        Order[]
+  reports       Report[]
   sessions      Session[]
   accounts      Account[]
 }
@@ -123,4 +124,37 @@ model OrderPhoto {
   caption   String?
 
   createdAt DateTime @default(now())
+}
+
+/// Laporan tindakan + invoice yang dibuat nakes untuk pasien.
+model Report {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Identitas invoice
+  invoiceNumber String  @unique
+  status        String  @default("draft") // draft | sent | paid
+
+  // Data pasien
+  patientName     String
+  patientWaNumber String
+
+  // Detail tindakan
+  actionDate        DateTime
+  actionType        String
+  actionDescription String?
+
+  // Line items biaya: [{ name: string, qty: number, price: number }]
+  items      Json
+
+  // Rincian tambahan
+  notes       String?
+  totalAmount Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
 }

@@ -31,5 +31,32 @@ export const WebsiteFormSchema = z.object({
   googleMaps: z.string().url("URL Google Maps tidak valid").max(1000).optional().or(z.literal("")),
 });
 
+export const ReportItemSchema = z.object({
+  name: z.string().min(1, "Nama item wajib diisi").max(100),
+  qty: z.number().int("Jumlah harus angka bulat").min(1, "Jumlah minimal 1"),
+  price: z.number().int("Harga harus angka bulat").min(0, "Harga minimal 0"),
+});
+
+export const ReportSchema = z.object({
+  patientName: z
+    .string()
+    .min(2, "Nama pasien minimal 2 karakter")
+    .max(100),
+  patientWaNumber: z
+    .string()
+    .regex(/^628\d{9,12}$/, "Format nomor WA harus 628xxx (9-12 digit)"),
+  actionDate: z
+    .string()
+    .refine((v) => !isNaN(Date.parse(v)), "Tanggal tindakan tidak valid"),
+  actionType: z.string().min(1, "Jenis tindakan wajib diisi").max(100),
+  actionDescription: z.string().max(1000).optional(),
+  items: z
+    .array(ReportItemSchema)
+    .min(1, "Minimal 1 item biaya"),
+  notes: z.string().max(1000).optional(),
+});
+
 export type PaymentClaimInput = z.infer<typeof PaymentClaimSchema>;
 export type WebsiteFormInput = z.infer<typeof WebsiteFormSchema>;
+export type ReportInput = z.infer<typeof ReportSchema>;
+export type ReportItem = z.infer<typeof ReportItemSchema>;
