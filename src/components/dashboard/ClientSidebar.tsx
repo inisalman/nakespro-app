@@ -23,15 +23,15 @@ interface ClientSidebarProps {
   };
   isAdmin?: boolean;
   subscription?: {
-    plan: "Starter" | "Pro";
-    status: "Aktif" | "Expired";
+    plan: "Starter" | "Pro" | "Profesional";
+    status: "Aktif" | "Expired" | "Belum Aktif";
   };
 }
 
 export default function ClientSidebar({
   user,
   isAdmin = false,
-  subscription = { plan: "Pro", status: "Aktif" }
+  subscription = { plan: "Starter", status: "Belum Aktif" }
 }: ClientSidebarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -100,7 +100,7 @@ export default function ClientSidebar({
             {subscription.plan}
           </div>
           <div className="flex items-center gap-1.5 text-xs text-neutral-500">
-            <span className={`w-1.5 h-1.5 rounded-full ${subscription.status === 'Aktif' ? 'bg-green-500' : 'bg-red-500'}`}></span>
+            <span className={`w-1.5 h-1.5 rounded-full ${subscription.status === 'Aktif' ? 'bg-green-500' : subscription.status === 'Expired' ? 'bg-red-500' : 'bg-neutral-400'}`}></span>
             {subscription.status}
           </div>
         </div>

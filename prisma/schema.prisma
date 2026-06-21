@@ -23,6 +23,7 @@ model User {
 
   orders        Order[]
   reports       Report[]
+  invoices      Invoice[]
   sessions      Session[]
   accounts      Account[]
 }
@@ -102,6 +103,7 @@ model Order {
   googleMaps      String?
 
   photos          OrderPhoto[]
+  invoices        Invoice[]
 
   buildStatus     String    @default("awaiting_payment")
   subdomain       String?   @unique
@@ -156,5 +158,42 @@ model Report {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+  @@index([status])
+}
+
+/// Riwayat tagihan langganan nakes (per siklus pembayaran).
+/// Berbeda dari Report (invoice pasien), ini untuk langganan website NakesPro itu sendiri.
+model Invoice {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderId       String
+  order         Order    @relation(fields: [orderId], references: [id])
+
+  // Identitas tagihan
+  invoiceNumber String   @unique // TAG-2026-0001
+  billingCycle  String // monthly | yearly
+
+  // Periode langganan yang ditagih
+  periodStart   DateTime
+  periodEnd     DateTime
+
+  // Nominal (IDR)
+  baseAmount    Int
+  uniqueCode    Int
+  totalAmount   Int
+
+  // Status pembayaran: pending | claimed | paid | overdue
+  status        String   @default("pending")
+  paymentProofUrl String?
+
+  issuedAt      DateTime @default(now())
+  paidAt        DateTime?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+  @@index([orderId])
   @@index([status])
 }

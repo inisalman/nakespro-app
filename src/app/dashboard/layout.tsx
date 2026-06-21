@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import ClientSidebar from "@/components/dashboard/ClientSidebar";
@@ -17,11 +18,18 @@ export default async function DashboardLayout({
   const adminEmails = process.env.ADMIN_EMAILS?.split(",") ?? [];
   const isAdmin = adminEmails.includes(session.user.email);
 
-  // Define dummy subscription for now (can be updated later with real DB queries)
-  const subscription = {
-    plan: "Pro" as const,
-    status: "Aktif" as const,
-  };
+  // Ambil order terbaru user untuk sidebar badge.
+  const orders = await prisma.order.findMany({
+    where: { userId: session.user.id },
+    orderBy: { createdAt: "desc" },
+    take: 1,
+    select: { packageType: true, isActive: true },
+  });
+
+  const plan = orders[0]?.packageType === "hemat" ? "Starter" as const : "Profesional" as const;
+  const status = orders[0]?.isActive ? "Aktif" as const : "Belum Aktif" as const;
+
+  const subscription = { plan, status };
 
   return (
     <div className="flex min-h-screen bg-neutral-50 w-full">

@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { notifyAdmin } from "@/lib/telegram";
+import { addBillingInterval } from "@/lib/billing";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 
@@ -107,16 +108,6 @@ Link Admin: https://app.nakespro.id/admin/orders/${orderId}`);
   revalidatePath("/admin");
 
   return { success: true };
-}
-
-function addBillingInterval(from: Date, cycle: string): Date {
-  const next = new Date(from);
-  if (cycle === "yearly") {
-    next.setFullYear(next.getFullYear() + 1);
-  } else {
-    next.setMonth(next.getMonth() + 1);
-  }
-  return next;
 }
 
 export async function publishWebsite(
