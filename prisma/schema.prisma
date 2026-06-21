@@ -103,6 +103,7 @@ model Order {
   googleMaps      String?
 
   photos          OrderPhoto[]
+  pageviews       PageView[]
   invoices        Invoice[]
 
   buildStatus     String    @default("awaiting_payment")
@@ -126,6 +127,28 @@ model OrderPhoto {
   caption   String?
 
   createdAt DateTime @default(now())
+}
+
+/// Kunjungan ke website client ({nama}.nakespro.id) yang dicatat via beacon.
+model PageView {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  /// SHA-256 hash dari IP + User-Agent. Tidak menyimpan IP asli.
+  visitorHash String
+
+  /// Path yang dikunjungi (mis. "/", "/layanan").
+  path        String
+  /// Referrer URL atau null untuk direct visit.
+  referrer    String?
+  /// User-Agent mentah, di-truncate 200 char. Untuk breakdown device nanti.
+  userAgent   String
+
+  createdAt   DateTime @default(now())
+
+  @@index([orderId, createdAt])
+  @@index([orderId, visitorHash, createdAt])
 }
 
 /// Laporan tindakan + invoice yang dibuat nakes untuk pasien.
