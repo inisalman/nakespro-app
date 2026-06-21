@@ -110,6 +110,74 @@ Link Admin: https://app.nakespro.id/admin/orders/${orderId}`);
   return { success: true };
 }
 
+/**
+ * Konfirmasi pembayaran invoice perpanjangan langganan oleh admin.
+ * Update status Invoice → "paid", extend nextBillingDate di Order.
+ */
+export async function confirmInvoicePayment(invoiceId: string) {
+  const validation = await validateAdmin();
+  if ("error" in validation) {
+    return { success: false, error: validation.error };
+  }
+
+  const invoice = await prisma.invoice.findUnique({
+    where: { id: invoiceId },
+    include: { order: { include: { user: true } }, user: true },
+  });
+
+  if (!invoice) {
+    return { success: false, error: "Invoice tidak ditemukan" };
+  }
+
+  if (invoice.status !== "claimed") {
+    return { success: false, error: "Invoice belum diklaim oleh client" };
+  }
+
+  // Update invoice jadi paid
+  await prisma.invoice.update({
+    where: { id: invoiceId },
+    data: {
+      status: "paid",
+      paidAt: new Date(),
+    },
+  });
+
+  // Extend nextBillingDate di order satu siklus ke depan
+  const nextBilling = addBillingInterval(
+    invoice.periodEnd,
+    invoice.billingCycle,
+  );
+
+  await prisma.order.update({
+    where: { id: invoice.orderId },
+    data: {
+      isActive: true,
+      nextBillingDate: nextBilling,
+      lastPaidAt: new Date(),
+    },
+  });
+
+  await notifyAdmin(
+    `✅ Pembayaran Perpanjangan Dikonfirmasi
+
+Tagihan: ${invoice.invoiceNumber}
+Order ID: ${invoice.orderId}
+Website: ${invoice.order.websiteName || "Belum diisi"}
+Client: ${invoice.user.name} (${invoice.user.email})
+Total: Rp${invoice.totalAmount.toLocaleString("id-ID")}
+Periode: ${invoice.periodStart.toLocaleDateString("id-ID")} — ${invoice.periodEnd.toLocaleDateString("id-ID")}
+Tagihan berikutnya: ${nextBilling.toLocaleDateString("id-ID")}
+
+Langganan diperpanjang otomatis!`,
+  );
+
+  revalidatePath("/admin/invoices");
+  revalidatePath(`/admin/orders/${invoice.orderId}`);
+  revalidatePath("/admin");
+
+  return { success: true };
+}
+
 export async function publishWebsite(
   orderId: string,
   websiteUrl: string
