@@ -319,10 +319,10 @@ function InvoiceStatusBadge({ status }: { status: string }) {
   );
 }
 
-/** Aksi per-baris: tombol bayar (link ke halaman QRIS) untuk tagihan pending. */
+/** Aksi per-baris: tombol bayar (link ke halaman QRIS invoice perpanjangan) untuk tagihan pending. */
 function InvoiceRowActions({
   invoice,
-  orderId,
+  orderId: _orderId,
 }: {
   invoice: InvoiceRow;
   orderId: string;
@@ -330,7 +330,7 @@ function InvoiceRowActions({
   if (invoice.status === "pending") {
     return (
       <Link
-        href={`/payment/${orderId}`}
+        href={`/payment/invoice/${invoice.id}`}
         className="inline-flex items-center gap-1.5 bg-primary-600 hover:bg-primary-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
       >
         Bayar
