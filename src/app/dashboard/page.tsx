@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Globe, Users, CreditCard, FileText, Edit, ExternalLink, ArrowRight } from "lucide-react";
+import { getMonthlyKpi } from "@/lib/analytics";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -27,13 +28,6 @@ export default async function DashboardPage() {
   const primaryOrder = orders[0];
   const isWebsiteLive = primaryOrder.buildStatus === "done";
 
-  // Dummy data for analytics and subscription (to match specification)
-  // TODO: Replace with real analytics API integration
-  const analyticsData = {
-    visitorsThisMonth: 124,
-    growthPercentage: 12, // +12%
-  };
-
   // Derive subscription data based on order.
   // Tagihan berikutnya dihitung sejak website live (set saat admin publish).
   const subscriptionEndDate = primaryOrder.nextBillingDate
@@ -43,6 +37,16 @@ export default async function DashboardPage() {
         year: "numeric",
       })
     : null;
+
+  // Statistik kunjungan nyata dari PageView
+  const kpi = await getMonthlyKpi(primaryOrder.id);
+  const formatGrowth = (pct: number): string => {
+    if (!isFinite(pct)) return "Baru";
+    if (pct === 0) return "0%";
+    if (pct > 0) return `+${pct}%`;
+    return `${pct}%`;
+  };
+  const kpiGrowth = formatGrowth(kpi.growthPct);
 
   const websiteUrl = primaryOrder.websiteUrl || `https://${primaryOrder.subdomain}.nakespro.id`;
 
@@ -120,7 +124,7 @@ export default async function DashboardPage() {
             <p className="text-sm font-medium text-neutral-500 mb-1">Pengunjung Bulan Ini</p>
             <div className="flex items-baseline gap-3 mb-4">
               <h3 className="text-3xl font-bold text-neutral-900">
-                {analyticsData.visitorsThisMonth} <span className="text-lg font-semibold text-neutral-500">Orang</span>
+                {kpi.total.toLocaleString("id-ID")} <span className="text-lg font-semibold text-neutral-500">Orang</span>
               </h3>
             </div>
 
@@ -129,7 +133,7 @@ export default async function DashboardPage() {
                 <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
-                +{analyticsData.growthPercentage}%
+                {kpiGrowth}
               </div>
               <span className="text-xs text-neutral-500">dari bulan lalu</span>
             </div>
