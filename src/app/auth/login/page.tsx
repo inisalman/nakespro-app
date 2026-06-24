@@ -12,134 +12,127 @@ export default async function LoginPage() {
     redirect("/dashboard");
   }
 
+  const features = [
+    { emoji: "🎨", title: "4 Template Profesional", desc: "Tinggal pilih, isi data, langsung jadi" },
+    { emoji: "⚡", title: "Live 2-3 Hari", desc: "Proses cepat, hasil maksimal" },
+    { emoji: "🌐", title: "Domain Gratis", desc: "*.nakespro.id included" },
+    { emoji: "🛡️", title: "Support Prioritas", desc: "Bantuan teknis 24/7 via WhatsApp" },
+  ];
+
   return (
-    <div className="w-full flex-1 grid lg:grid-cols-2 min-h-screen">
-      {/* Left Panel - Bold Hero with Gradient */}
-      <div className="relative gradient-hero overflow-hidden flex items-center justify-center p-6 sm:p-8 lg:p-16">
-        {/* Decorative geometric shapes */}
-        <div className="absolute inset-0 overflow-hidden opacity-20">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border-2 border-white/30 rounded-3xl rotate-12"></div>
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 w-full max-w-xl text-white">
-          <div className="animate-fade-in-up opacity-0">
-            <div className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
-              Platform Website Builder #1 untuk Nakes
-            </div>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 animate-fade-in-up opacity-0 delay-100">
-            Website Profesional dalam Hitungan Hari
-          </h1>
-
-          <p className="text-base sm:text-lg lg:text-xl opacity-90 mb-6 sm:mb-8 animate-fade-in-up opacity-0 delay-200">
-            Bergabung dengan ratusan tenaga kesehatan yang sudah memiliki website profesional.
-            Mulai dari Rp25.000/bulan.
-          </p>
-
-          <div className="space-y-3 sm:space-y-4 animate-fade-in-up opacity-0 delay-300">
-            <div className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <span className="text-base sm:text-lg">4 template profesional ready-to-use</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <span className="text-base sm:text-lg">Live dalam 2-3 hari kerja</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <span className="text-base sm:text-lg">Domain gratis .nakespro.id</span>
-            </div>
-          </div>
-
-          <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-white/20 animate-fade-in opacity-0 delay-400">
-            <p className="text-xs sm:text-sm opacity-75 mb-3">Dipercaya oleh profesional kesehatan:</p>
-            <div className="flex items-center gap-2">
-              <div className="flex -space-x-2">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/30 backdrop-blur-sm border-2 border-white/50"></div>
-                ))}
-              </div>
-              <span className="text-xs sm:text-sm font-semibold ml-2">+200 praktisi</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Right Panel - Clean Form Area */}
-      <div className="flex items-center justify-center p-6 sm:p-8 lg:p-16 bg-white w-full">
-        <div className="w-full max-w-md">
-          <div className="animate-scale-in opacity-0 delay-200">
-            <a
-              href="https://nakespro.id"
-              className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors mb-6 sm:mb-8"
-            >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    <div className="flex min-h-dvh flex-col items-center justify-center bg-gradient-to-b from-primary-50/50 to-white px-4 py-12">
+      {/* Card */}
+      <div className="w-full max-w-md">
+        {/* Logo & Brand */}
+        <div className="mb-8 text-center">
+          <Link
+            href="https://nakespro.id"
+            className="inline-flex items-center gap-2.5"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-sm">
+              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
               </svg>
-              <span className="text-xs sm:text-sm font-medium">Kembali ke Beranda</span>
-            </a>
-
-            <div className="mb-8 sm:mb-10">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3">
-                Masuk ke NakesPro
-              </h2>
-              <p className="text-sm sm:text-base text-neutral-600">
-                Kelola website profesional Anda dengan mudah
-              </p>
             </div>
+            <span className="text-xl font-bold tracking-tight text-neutral-900">
+              NakesPro
+            </span>
+          </Link>
+        </div>
 
-            <div className="space-y-4 sm:space-y-6">
-              <LoginButton />
+        {/* Login Card */}
+        <div className="rounded-2xl border border-neutral-200/60 bg-white px-6 py-10 shadow-sm sm:px-10">
+          {/* Heading */}
+          <div className="mb-8 text-center">
+            <h1 className="mb-1.5 text-2xl font-bold tracking-tight text-neutral-900">
+              Masuk ke NakesPro
+            </h1>
+            <p className="text-sm text-neutral-500">
+              Kelola website profesional Anda dengan mudah
+            </p>
+          </div>
 
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-neutral-200"></div>
-                </div>
-                <div className="relative flex justify-center text-xs sm:text-sm">
-                  <span className="px-4 bg-white text-neutral-500">atau</span>
-                </div>
-              </div>
+          {/* Login Button */}
+          <LoginButton />
 
-              <div className="text-center">
-                <p className="text-xs sm:text-sm text-neutral-600">
-                  Belum punya akun?{" "}
-                  <span className="font-semibold text-neutral-900">
-                    Login otomatis membuat akun baru
-                  </span>
-                </p>
-              </div>
-
-              <div className="pt-4 sm:pt-6 border-t border-neutral-100">
-                <p className="text-xs text-neutral-500 text-center">
-                  Dengan masuk, Anda menyetujui{" "}
-                  <a href="#" className="text-neutral-900 hover:underline font-medium">
-                    Syarat & Ketentuan
-                  </a>
-                  {" "}dan{" "}
-                  <a href="#" className="text-neutral-900 hover:underline font-medium">
-                    Kebijakan Privasi
-                  </a>
-                  {" "}kami
-                </p>
-              </div>
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-neutral-100" />
+            </div>
+            <div className="relative flex justify-center">
+              <span className="bg-white px-3 text-xs text-neutral-400">
+                atau
+              </span>
             </div>
           </div>
+
+          {/* Auto-register info */}
+          <p className="text-center text-sm text-neutral-500">
+            Belum punya akun?{" "}
+            <span className="font-semibold text-neutral-900">
+              Login otomatis membuat akun baru
+            </span>
+          </p>
+        </div>
+
+        {/* Feature highlights */}
+        <div className="mt-8 grid grid-cols-2 gap-3">
+          {features.map((f) => (
+            <div
+              key={f.title}
+              className="rounded-xl border border-neutral-100 bg-white/70 p-3.5 text-center backdrop-blur-sm transition-colors hover:border-primary-100 hover:bg-primary-50/30"
+            >
+              <span className="text-lg">{f.emoji}</span>
+              <p className="mt-0.5 text-xs font-semibold text-neutral-800">
+                {f.title}
+              </p>
+              <p className="text-[11px] text-neutral-400">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Trust */}
+        <div className="mt-6 text-center">
+          <div className="inline-flex items-center gap-3 rounded-full border border-neutral-100 bg-white/60 px-5 py-2 backdrop-blur-sm">
+            <div className="flex -space-x-1.5">
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="h-6 w-6 rounded-full border-2 border-white bg-gradient-to-br from-primary-200 to-primary-300"
+                />
+              ))}
+            </div>
+            <span className="text-xs font-medium text-neutral-600">
+              Dipercaya <span className="text-neutral-900">200+</span> praktisi
+              kesehatan
+            </span>
+          </div>
+        </div>
+
+        {/* Terms */}
+        <p className="mt-8 text-center text-xs text-neutral-400">
+          Dengan masuk, Anda menyetujui{" "}
+          <a href="#" className="font-medium text-neutral-600 hover:text-neutral-900 underline underline-offset-2">
+            Syarat & Ketentuan
+          </a>{" "}
+          dan{" "}
+          <a href="#" className="font-medium text-neutral-600 hover:text-neutral-900 underline underline-offset-2">
+            Kebijakan Privasi
+          </a>
+        </p>
+
+        {/* Back link */}
+        <div className="mt-6 text-center">
+          <Link
+            href="https://nakespro.id"
+            className="inline-flex items-center gap-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
+          >
+            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Kembali ke Beranda NakesPro
+          </Link>
         </div>
       </div>
     </div>
