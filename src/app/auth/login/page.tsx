@@ -12,13 +12,6 @@ export default async function LoginPage() {
     redirect("/dashboard");
   }
 
-  const features = [
-    { emoji: "🎨", title: "4 Template Profesional", desc: "Tinggal pilih, isi data, langsung jadi" },
-    { emoji: "⚡", title: "Live 2-3 Hari", desc: "Proses cepat, hasil maksimal" },
-    { emoji: "🌐", title: "Domain Gratis", desc: "*.nakespro.id included" },
-    { emoji: "🛡️", title: "Support Prioritas", desc: "Bantuan teknis 24/7 via WhatsApp" },
-  ];
-
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-gradient-to-b from-primary-50/50 to-white px-4 py-12">
       {/* Card */}
@@ -74,22 +67,6 @@ export default async function LoginPage() {
               Login otomatis membuat akun baru
             </span>
           </p>
-        </div>
-
-        {/* Feature highlights */}
-        <div className="mt-8 grid grid-cols-2 gap-3">
-          {features.map((f) => (
-            <div
-              key={f.title}
-              className="rounded-xl border border-neutral-100 bg-white/70 p-3.5 text-center backdrop-blur-sm transition-colors hover:border-primary-100 hover:bg-primary-50/30"
-            >
-              <span className="text-lg">{f.emoji}</span>
-              <p className="mt-0.5 text-xs font-semibold text-neutral-800">
-                {f.title}
-              </p>
-              <p className="text-[11px] text-neutral-400">{f.desc}</p>
-            </div>
-          ))}
         </div>
 
         {/* Trust */}
