@@ -13,103 +13,168 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center bg-gradient-to-b from-primary-50/50 to-white px-4 py-12">
-      {/* Card */}
-      <div className="w-full max-w-md">
-        {/* Logo & Brand */}
-        <div className="mb-8 text-center">
+    <div className="flex min-h-[100dvh]">
+      {/* Left Panel - Brand / Visual */}
+      <div className="hidden lg:flex lg:w-[45%] relative bg-[#0C1929] overflow-hidden select-none">
+        {/* Subtle ambient orbs */}
+        <div className="absolute -top-48 -right-24 w-[32rem] h-[32rem] bg-emerald-500/8 rounded-full blur-[120px]" />
+        <div className="absolute -bottom-48 -left-24 w-[36rem] h-[36rem] bg-cyan-500/8 rounded-full blur-[120px]" />
+
+        {/* Faint grid texture overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.035]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+          }}
+        />
+
+        <div className="relative z-10 flex flex-col justify-between p-12 xl:p-16 w-full">
+          {/* Brand */}
           <Link
             href="https://nakespro.id"
-            className="inline-flex items-center gap-2.5"
+            className="inline-flex items-center gap-2.5 group"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-sm">
-              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center">
+              <svg
+                className="w-5 h-5 text-[#0C1929]"
+                fill="none"
+                viewBox="0 0 20 20"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10 2v16M2 10h16"
+                />
               </svg>
             </div>
-            <span className="text-xl font-bold tracking-tight text-neutral-900">
+            <span className="text-lg font-bold tracking-tight text-white/90">
               NakesPro
             </span>
           </Link>
-        </div>
 
-        {/* Login Card */}
-        <div className="rounded-2xl border border-neutral-200/60 bg-white px-6 py-10 shadow-sm sm:px-10">
-          {/* Heading */}
-          <div className="mb-8 text-center">
-            <h1 className="mb-1.5 text-2xl font-bold tracking-tight text-neutral-900">
-              Masuk ke NakesPro
-            </h1>
+          {/* Center: calm value prop */}
+          <div className="flex-1 flex items-center">
+            <div className="space-y-4 max-w-sm">
+              <h1 className="text-[clamp(1.75rem,3vw,2.5rem)] font-bold leading-tight tracking-tight text-white">
+                Website profesional
+                <br />
+                untuk tenaga kesehatan
+              </h1>
+              <p className="text-base leading-relaxed text-white/50">
+                Kelola website, jadwal, dan profil praktik Anda dalam satu
+                platform. Tanpa ribet, tanpa perlu coding.
+              </p>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <p className="text-xs text-white/20">
+            &copy; 2025 NakesPro
+          </p>
+        </div>
+      </div>
+
+      {/* Right Panel - Login Form */}
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 lg:p-16 bg-white">
+        <div className="w-full max-w-sm">
+          {/* Back link */}
+          <Link
+            href="https://nakespro.id"
+            className="inline-flex items-center gap-1.5 text-neutral-400 hover:text-neutral-700 transition-colors mb-10 group"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+            <span className="text-sm">Kembali</span>
+          </Link>
+
+          {/* Form header */}
+          <div className="mb-10">
+            {/* Mobile brand indicator */}
+            <div className="flex items-center gap-2 lg:hidden mb-8">
+              <div className="w-8 h-8 rounded-lg bg-[#0C1929] flex items-center justify-center">
+                <svg
+                  className="w-4 h-4 text-white"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M10 2v16M2 10h16"
+                  />
+                </svg>
+              </div>
+              <span className="text-base font-bold tracking-tight text-[#0C1929]">
+                NakesPro
+              </span>
+            </div>
+
+            <h2 className="text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-tight text-neutral-900 mb-2">
+              Masuk ke akun Anda
+            </h2>
             <p className="text-sm text-neutral-500">
               Kelola website profesional Anda dengan mudah
             </p>
           </div>
 
-          {/* Login Button */}
-          <LoginButton />
+          {/* Login action */}
+          <div className="space-y-6">
+            <LoginButton />
 
-          {/* Divider */}
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-neutral-100" />
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-neutral-100" />
+              </div>
+              <div className="relative flex justify-center">
+                <span className="px-3 text-xs text-neutral-400 bg-white">
+                  atau
+                </span>
+              </div>
             </div>
-            <div className="relative flex justify-center">
-              <span className="bg-white px-3 text-xs text-neutral-400">
-                atau
+
+            <p className="text-center text-sm text-neutral-500">
+              Belum punya akun?{" "}
+              <span className="font-semibold text-neutral-800">
+                Login otomatis membuat akun baru
               </span>
-            </div>
+            </p>
           </div>
 
-          {/* Auto-register info */}
-          <p className="text-center text-sm text-neutral-500">
-            Belum punya akun?{" "}
-            <span className="font-semibold text-neutral-900">
-              Login otomatis membuat akun baru
-            </span>
+          {/* Terms */}
+          <p className="mt-10 text-xs leading-relaxed text-neutral-400 text-center">
+            Dengan masuk, Anda menyetujui{" "}
+            <a
+              href="#"
+              className="text-neutral-600 hover:text-neutral-900 underline underline-offset-2 transition-colors"
+            >
+              Syarat & Ketentuan
+            </a>{" "}
+            dan{" "}
+            <a
+              href="#"
+              className="text-neutral-600 hover:text-neutral-900 underline underline-offset-2 transition-colors"
+            >
+              Kebijakan Privasi
+            </a>{" "}
+            kami
           </p>
-        </div>
-
-        {/* Trust */}
-        <div className="mt-6 text-center">
-          <div className="inline-flex items-center gap-3 rounded-full border border-neutral-100 bg-white/60 px-5 py-2 backdrop-blur-sm">
-            <div className="flex -space-x-1.5">
-              {[1, 2, 3, 4].map((i) => (
-                <div
-                  key={i}
-                  className="h-6 w-6 rounded-full border-2 border-white bg-gradient-to-br from-primary-200 to-primary-300"
-                />
-              ))}
-            </div>
-            <span className="text-xs font-medium text-neutral-600">
-              Dipercaya <span className="text-neutral-900">200+</span> praktisi
-              kesehatan
-            </span>
-          </div>
-        </div>
-
-        {/* Terms */}
-        <p className="mt-8 text-center text-xs text-neutral-400">
-          Dengan masuk, Anda menyetujui{" "}
-          <a href="#" className="font-medium text-neutral-600 hover:text-neutral-900 underline underline-offset-2">
-            Syarat & Ketentuan
-          </a>{" "}
-          dan{" "}
-          <a href="#" className="font-medium text-neutral-600 hover:text-neutral-900 underline underline-offset-2">
-            Kebijakan Privasi
-          </a>
-        </p>
-
-        {/* Back link */}
-        <div className="mt-6 text-center">
-          <Link
-            href="https://nakespro.id"
-            className="inline-flex items-center gap-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
-          >
-            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Kembali ke Beranda NakesPro
-          </Link>
         </div>
       </div>
     </div>
