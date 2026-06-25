@@ -15,10 +15,10 @@ export default async function LoginPage() {
   return (
     <div className="flex min-h-[100dvh]">
       {/* Left Panel - Brand / Visual */}
-      <div className="hidden lg:flex lg:w-[45%] relative bg-[#0C1929] overflow-hidden select-none">
+      <div className="hidden lg:flex lg:w-[45%] relative bg-[#0F1717] overflow-hidden select-none">
         {/* Subtle ambient orbs */}
-        <div className="absolute -top-48 -right-24 w-[32rem] h-[32rem] bg-emerald-500/8 rounded-full blur-[120px]" />
-        <div className="absolute -bottom-48 -left-24 w-[36rem] h-[36rem] bg-cyan-500/8 rounded-full blur-[120px]" />
+        <div className="absolute -top-48 -right-24 w-[32rem] h-[32rem] bg-[#3F72AF]/10 rounded-full blur-[120px]" />
+        <div className="absolute -bottom-48 -left-24 w-[36rem] h-[36rem] bg-[#3F72AF]/8 rounded-full blur-[120px]" />
 
         {/* Faint grid texture overlay */}
         <div
@@ -38,7 +38,7 @@ export default async function LoginPage() {
           >
             <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center">
               <svg
-                className="w-5 h-5 text-[#0C1929]"
+                className="w-5 h-5 text-[#0F1717]"
                 fill="none"
                 viewBox="0 0 20 20"
                 stroke="currentColor"
@@ -84,7 +84,7 @@ export default async function LoginPage() {
           {/* Back link */}
           <Link
             href="https://nakespro.id"
-            className="inline-flex items-center gap-1.5 text-neutral-400 hover:text-neutral-700 transition-colors mb-10 group"
+            className="inline-flex items-center gap-1.5 text-[#525C5A] hover:text-[#0F1717] transition-colors mb-10 group"
           >
             <svg
               className="w-4 h-4"
@@ -106,7 +106,7 @@ export default async function LoginPage() {
           <div className="mb-10">
             {/* Mobile brand indicator */}
             <div className="flex items-center gap-2 lg:hidden mb-8">
-              <div className="w-8 h-8 rounded-lg bg-[#0C1929] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-[#0F1717] flex items-center justify-center">
                 <svg
                   className="w-4 h-4 text-white"
                   fill="none"
@@ -121,15 +121,15 @@ export default async function LoginPage() {
                   />
                 </svg>
               </div>
-              <span className="text-base font-bold tracking-tight text-[#0C1929]">
+              <span className="text-base font-bold tracking-tight text-[#0F1717]">
                 NakesPro
               </span>
             </div>
 
-            <h2 className="text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-tight text-neutral-900 mb-2">
+            <h2 className="text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-tight text-[#0F1717] mb-2">
               Masuk ke akun Anda
             </h2>
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-[#525C5A]">
               Kelola website profesional Anda dengan mudah
             </p>
           </div>
@@ -140,36 +140,36 @@ export default async function LoginPage() {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-neutral-100" />
+                <div className="w-full border-t border-[#ECECE6]" />
               </div>
               <div className="relative flex justify-center">
-                <span className="px-3 text-xs text-neutral-400 bg-white">
+                <span className="px-3 text-xs text-[#525C5A] bg-white">
                   atau
                 </span>
               </div>
             </div>
 
-            <p className="text-center text-sm text-neutral-500">
+            <p className="text-center text-sm text-[#525C5A]">
               Belum punya akun?{" "}
-              <span className="font-semibold text-neutral-800">
+              <span className="font-semibold text-[#0F1717]">
                 Login otomatis membuat akun baru
               </span>
             </p>
           </div>
 
           {/* Terms */}
-          <p className="mt-10 text-xs leading-relaxed text-neutral-400 text-center">
+          <p className="mt-10 text-xs leading-relaxed text-center text-[#525C5A]">
             Dengan masuk, Anda menyetujui{" "}
             <a
               href="#"
-              className="text-neutral-600 hover:text-neutral-900 underline underline-offset-2 transition-colors"
+              className="text-[#3F72AF] hover:underline underline-offset-2 transition-colors"
             >
               Syarat & Ketentuan
             </a>{" "}
             dan{" "}
             <a
               href="#"
-              className="text-neutral-600 hover:text-neutral-900 underline underline-offset-2 transition-colors"
+              className="text-[#3F72AF] hover:underline underline-offset-2 transition-colors"
             >
               Kebijakan Privasi
             </a>{" "}

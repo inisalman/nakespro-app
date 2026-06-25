@@ -13,7 +13,7 @@ export default function LoginButton() {
   return (
     <button
       onClick={handleLogin}
-      className="w-full flex items-center justify-center gap-3 bg-white border border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 text-neutral-800 px-5 py-3.5 rounded-xl font-medium text-sm transition-all active:scale-[0.98]"
+      className="w-full flex items-center justify-center gap-3 bg-white border border-[#ECECE6] hover:border-[#3F72AF]/30 hover:bg-[#EEF3FA] text-[#0F1717] px-5 py-3.5 rounded-xl font-medium text-sm transition-all active:scale-[0.98]"
     >
       <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
         <path
