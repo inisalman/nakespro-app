@@ -220,3 +220,21 @@ model Invoice {
   @@index([orderId])
   @@index([status])
 }
+
+/// Data kunjungan/pengunjung website client NakesPro.
+/// Dikirim oleh track.js dari setiap template client.
+model TrackingEvent {
+  id        String   @id @default(cuid())
+  siteId    String   // subdomain client (misal: "klinik-sehat")
+  url       String   // halaman yang dikunjungi
+  referrer  String?  // asal kunjungan
+  title     String?  // judul halaman
+  screen    String?  // resolusi layar
+  language  String?  // bahasa browser
+  ipAddress String?  // IP pengunjung
+  userAgent String?  // user-agent browser
+  createdAt DateTime @default(now())
+
+  @@index([siteId, createdAt])
+  @@index([siteId])
+}

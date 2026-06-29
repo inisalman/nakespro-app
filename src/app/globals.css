@@ -145,21 +145,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* Gradient backgrounds */
-.gradient-hero {
-  background: linear-gradient(135deg,
-    var(--color-primary-600) 0%,
-    var(--color-primary-500) 25%,
-    var(--color-accent-600) 75%,
-    var(--color-accent-500) 100%);
-}
-
-.gradient-soft {
-  background: linear-gradient(135deg,
-    var(--color-primary-50) 0%,
-    var(--color-accent-50) 100%);
-}
-
 /* Animations */
 @keyframes fadeInUp {
   from {
