@@ -28,6 +28,11 @@ export default function LaporanFormClient() {
   ]);
   const [notes, setNotes] = useState("");
 
+  const [soapSubjective, setSoapSubjective] = useState("");
+  const [soapObjective, setSoapObjective] = useState("");
+  const [soapAssessment, setSoapAssessment] = useState("");
+  const [soapPlanning, setSoapPlanning] = useState("");
+
   const totalAmount = items.reduce((sum, item) => sum + item.qty * item.price, 0);
 
   const updateItem = (index: number, field: keyof ReportItem, value: string | number) => {
@@ -99,6 +104,10 @@ export default function LaporanFormClient() {
         actionDescription: actionDescription.trim() || undefined,
         items: validItems,
         notes: notes.trim() || undefined,
+        soapSubjective: soapSubjective.trim() || undefined,
+        soapObjective: soapObjective.trim() || undefined,
+        soapAssessment: soapAssessment.trim() || undefined,
+        soapPlanning: soapPlanning.trim() || undefined,
       });
 
       if (!result.success) {
@@ -223,6 +232,108 @@ export default function LaporanFormClient() {
             <p className="text-xs text-neutral-500 mt-1.5">
               {actionDescription.length}/1000 karakter
             </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Laporan SOAP */}
+      <div className="bg-white rounded-2xl border border-neutral-200 p-6">
+        <div className="flex items-center justify-between mb-5 border-b border-neutral-100 pb-3">
+          <div>
+            <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
+              Laporan SOAP
+              <span className="text-xs font-normal text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded-full">Opsional</span>
+            </h2>
+            <p className="text-xs text-neutral-500 mt-1">Dokumentasi rekam medis pasien terstruktur</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Subjektif */}
+          <div>
+            <label className="block text-sm font-semibold text-neutral-900 mb-1.5 flex items-center gap-1.5">
+              <span className="w-5 h-5 rounded bg-amber-50 text-amber-700 flex items-center justify-center text-xs font-bold shrink-0">S</span>
+              Subjektif (S)
+            </label>
+            <textarea
+              value={soapSubjective}
+              onChange={(e) => setSoapSubjective(e.target.value)}
+              placeholder="Keluhan utama pasien, keluhan penyerta, riwayat penyakit sekarang..."
+              rows={4}
+              className="w-full px-3.5 py-2.5 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors text-sm resize-none"
+              maxLength={2000}
+            />
+            <div className="flex justify-between items-center mt-1">
+              <span className="text-[10px] text-neutral-400">Anamnesis & Keluhan</span>
+              <span className="text-[10px] text-neutral-400 font-mono">
+                {soapSubjective.length}/2000
+              </span>
+            </div>
+          </div>
+
+          {/* Objektif */}
+          <div>
+            <label className="block text-sm font-semibold text-neutral-900 mb-1.5 flex items-center gap-1.5">
+              <span className="w-5 h-5 rounded bg-blue-50 text-blue-700 flex items-center justify-center text-xs font-bold shrink-0">O</span>
+              Objektif (O)
+            </label>
+            <textarea
+              value={soapObjective}
+              onChange={(e) => setSoapObjective(e.target.value)}
+              placeholder="Hasil pemeriksaan fisik, tanda-tanda vital (tensi, nadi, suhu), laboratorium, radiologi..."
+              rows={4}
+              className="w-full px-3.5 py-2.5 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors text-sm resize-none"
+              maxLength={2000}
+            />
+            <div className="flex justify-between items-center mt-1">
+              <span className="text-[10px] text-neutral-400">Pemeriksaan Fisik & Klinis</span>
+              <span className="text-[10px] text-neutral-400 font-mono">
+                {soapObjective.length}/2000
+              </span>
+            </div>
+          </div>
+
+          {/* Assessment */}
+          <div>
+            <label className="block text-sm font-semibold text-neutral-900 mb-1.5 flex items-center gap-1.5">
+              <span className="w-5 h-5 rounded bg-emerald-50 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">A</span>
+              Asesmen / Diagnosis (A)
+            </label>
+            <textarea
+              value={soapAssessment}
+              onChange={(e) => setSoapAssessment(e.target.value)}
+              placeholder="Diagnosis utama (kerja), diagnosis sekunder/banding, kesimpulan pemeriksaan..."
+              rows={4}
+              className="w-full px-3.5 py-2.5 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors text-sm resize-none"
+              maxLength={2000}
+            />
+            <div className="flex justify-between items-center mt-1">
+              <span className="text-[10px] text-neutral-400">Diagnosis & Analisis</span>
+              <span className="text-[10px] text-neutral-400 font-mono">
+                {soapAssessment.length}/2000
+              </span>
+            </div>
+          </div>
+
+          {/* Planning */}
+          <div>
+            <label className="block text-sm font-semibold text-neutral-900 mb-1.5 flex items-center gap-1.5">
+              <span className="w-5 h-5 rounded bg-purple-50 text-purple-700 flex items-center justify-center text-xs font-bold shrink-0">P</span>
+              Perencanaan / Planning (P)
+            </label>
+            <textarea
+              value={soapPlanning}
+              onChange={(e) => setSoapPlanning(e.target.value)}
+              placeholder="Terapi, resep obat, tindakan medis lanjutan, edukasi pasien, rujukan..."
+              rows={4}
+              className="w-full px-3.5 py-2.5 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors text-sm resize-none"
+              maxLength={2000}
+            />
+            <div className="flex justify-between items-center mt-1">
+              <span className="text-[10px] text-neutral-400">Tindakan & Rencana Lanjut</span>
+              <span className="text-[10px] text-neutral-400 font-mono">
+                {soapPlanning.length}/2000
+              </span>
+            </div>
           </div>
         </div>
       </div>

@@ -108,7 +108,15 @@ export default async function LaporanPage() {
                       {report.patientName}
                     </td>
                     <td className="px-6 py-4 text-sm text-neutral-600">
-                      {report.actionType}
+                      <div className="flex flex-col gap-1">
+                        <span>{report.actionType}</span>
+                        {(report.soapSubjective || report.soapObjective || report.soapAssessment || report.soapPlanning) && (
+                          <span className="inline-flex items-center w-max gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                            SOAP Aktif
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-neutral-500 whitespace-nowrap">
                       {new Date(report.actionDate).toLocaleDateString("id-ID")}
@@ -145,12 +153,20 @@ export default async function LaporanPage() {
                   </div>
                   <StatusBadge status={report.status} />
                 </div>
-                <div className="flex items-center gap-3 text-xs text-neutral-500 mb-3">
+                <div className="flex items-center gap-3 text-xs text-neutral-500 mb-3 flex-wrap">
                   <span>{report.actionType}</span>
-                  <span className="w-1 h-1 rounded-full bg-neutral-300" />
+                  <span className="w-1 h-1 rounded-full bg-neutral-300 shrink-0" />
                   <span>
                     {new Date(report.actionDate).toLocaleDateString("id-ID")}
                   </span>
+                  {(report.soapSubjective || report.soapObjective || report.soapAssessment || report.soapPlanning) && (
+                    <>
+                      <span className="w-1 h-1 rounded-full bg-neutral-300 shrink-0" />
+                      <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded border border-emerald-100 shrink-0">
+                        SOAP
+                      </span>
+                    </>
+                  )}
                 </div>
                 <div className="flex items-center justify-between">
                   <p className="text-base font-bold text-neutral-900">

@@ -9,6 +9,7 @@ import {
   Trash2,
   CheckCircle,
   Eye,
+  Stethoscope,
 } from "lucide-react";
 
 export interface Report {
@@ -17,6 +18,10 @@ export interface Report {
   status: string;
   patientName: string;
   patientWaNumber: string;
+  soapSubjective?: string | null;
+  soapObjective?: string | null;
+  soapAssessment?: string | null;
+  soapPlanning?: string | null;
 }
 
 export default function ReportListActions({ report }: { report: Report }) {
@@ -69,10 +74,23 @@ export default function ReportListActions({ report }: { report: Report }) {
         target="_blank"
         rel="noopener noreferrer"
         className="p-2 text-neutral-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
-        title="Lihat PDF"
+        title="Lihat PDF Invoice"
       >
         <Eye size={16} />
       </a>
+
+      {/* SOAP PDF */}
+      {!!(report.soapSubjective || report.soapObjective || report.soapAssessment || report.soapPlanning) && (
+        <a
+          href={`/api/reports/${report.id}/soap`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-2 text-neutral-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+          title="Lihat Rekam Medis (SOAP)"
+        >
+          <Stethoscope size={16} />
+        </a>
+      )}
 
       {/* Kirim via WhatsApp */}
       <a

@@ -177,6 +177,12 @@ model Report {
   notes       String?
   totalAmount Int
 
+  // Laporan SOAP (Opsional)
+  soapSubjective  String?
+  soapObjective   String?
+  soapAssessment  String?
+  soapPlanning    String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

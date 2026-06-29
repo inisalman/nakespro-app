@@ -2,8 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { generateInvoicePDF, type InvoiceData } from "@/lib/pdf";
-import type { ReportItem } from "@/lib/validations";
+import { generateSOAPPDF, type SOAPData } from "@/lib/pdf";
 
 export async function GET(
   req: NextRequest,
@@ -35,54 +34,26 @@ export async function GET(
 
   const order = report.user.orders[0] ?? null;
 
-  // Normalisasi items: pastikan selalu array berisi item valid.
-  // Kolom JSON bisa berbentuk tak terduga jika data lama/rusak.
-  const rawItems = Array.isArray(report.items) ? report.items : [];
-  const items: ReportItem[] = rawItems
-    .filter(
-      (it: unknown): it is ReportItem =>
-        typeof it === "object" &&
-        it !== null &&
-        typeof (it as ReportItem).name === "string" &&
-        typeof (it as ReportItem).qty === "number" &&
-        typeof (it as ReportItem).price === "number"
-    )
-    .map((it) => ({
-      name: String(it.name),
-      qty: Number(it.qty) || 1,
-      price: Number(it.price) || 0,
-    }));
-
-  if (items.length === 0) {
-    return NextResponse.json(
-      { error: "Laporan tidak memiliki item biaya" },
-      { status: 400 }
-    );
-  }
-
-  const invoiceData: InvoiceData = {
+  const soapData: SOAPData = {
     invoiceNumber: report.invoiceNumber,
     actionDate: report.actionDate,
     patientName: report.patientName,
     patientWaNumber: report.patientWaNumber,
     actionType: report.actionType,
     actionDescription: report.actionDescription,
-    items,
     notes: report.notes,
-    totalAmount: report.totalAmount,
-    practitionerName: order?.fullName ?? session.user.name,
-    practitionerPractice: order?.websiteName ?? null,
-    practitionerLocation: order?.location ?? null,
     soapSubjective: report.soapSubjective,
     soapObjective: report.soapObjective,
     soapAssessment: report.soapAssessment,
     soapPlanning: report.soapPlanning,
+    practitionerName: order?.fullName ?? session.user.name,
+    practitionerPractice: order?.websiteName ?? null,
+    practitionerLocation: order?.location ?? null,
   };
 
   try {
-    const pdfBuffer = await generateInvoicePDF(invoiceData);
+    const pdfBuffer = await generateSOAPPDF(soapData);
 
-    // ?download=1 → paksa download, default preview di browser
     const url = new URL(req.url);
     const isDownload = url.searchParams.get("download") === "1";
 
@@ -90,17 +61,16 @@ export async function GET(
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": isDownload
-          ? `attachment; filename="${report.invoiceNumber}.pdf"`
-          : `inline; filename="${report.invoiceNumber}.pdf"`,
+          ? `attachment; filename="SOAP-${report.invoiceNumber}.pdf"`
+          : `inline; filename="SOAP-${report.invoiceNumber}.pdf"`,
         "Content-Length": pdfBuffer.length.toString(),
       },
     });
   } catch (err) {
-    // Sertakan pesan error agar mudah di-debug dari response/network tab.
     const message = err instanceof Error ? err.message : "Unknown error";
-    console.error("PDF generation error:", err);
+    console.error("SOAP PDF generation error:", err);
     return NextResponse.json(
-      { error: `Gagal generate PDF: ${message}` },
+      { error: `Gagal generate PDF SOAP: ${message}` },
       { status: 500 }
     );
   }

@@ -54,6 +54,10 @@ export const ReportSchema = z.object({
     .array(ReportItemSchema)
     .min(1, "Minimal 1 item biaya"),
   notes: z.string().max(1000).optional(),
+  soapSubjective: z.string().max(2000).optional(),
+  soapObjective: z.string().max(2000).optional(),
+  soapAssessment: z.string().max(2000).optional(),
+  soapPlanning: z.string().max(2000).optional(),
 });
 
 export type PaymentClaimInput = z.infer<typeof PaymentClaimSchema>;

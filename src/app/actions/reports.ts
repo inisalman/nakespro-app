@@ -65,6 +65,10 @@ export async function createReport(
       items: validated.items,
       notes: validated.notes || null,
       totalAmount,
+      soapSubjective: validated.soapSubjective || null,
+      soapObjective: validated.soapObjective || null,
+      soapAssessment: validated.soapAssessment || null,
+      soapPlanning: validated.soapPlanning || null,
     },
   });
 
