@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import LoginButton from "./login-button";
 import Link from "next/link";
+import Image from "next/image";
 
 export default async function LoginPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -34,26 +35,17 @@ export default async function LoginPage() {
           {/* Brand */}
           <Link
             href="https://nakespro.id"
-            className="inline-flex items-center gap-2.5 group"
+            className="inline-flex items-center group w-fit"
           >
-            <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center">
-              <svg
-                className="w-5 h-5 text-[#0F1717]"
-                fill="none"
-                viewBox="0 0 20 20"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M10 2v16M2 10h16"
-                />
-              </svg>
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-2">
+              <Image
+                src="/nakespro-logo.webp"
+                alt="NakesPro.id"
+                width={160}
+                height={40}
+                className="h-auto w-auto"
+              />
             </div>
-            <span className="text-lg font-bold tracking-tight text-white/90">
-              NakesPro
-            </span>
           </Link>
 
           {/* Center: calm value prop */}
@@ -105,25 +97,14 @@ export default async function LoginPage() {
           {/* Form header */}
           <div className="mb-10">
             {/* Mobile brand indicator */}
-            <div className="flex items-center gap-2 lg:hidden mb-8">
-              <div className="w-8 h-8 rounded-lg bg-[#0F1717] flex items-center justify-center">
-                <svg
-                  className="w-4 h-4 text-white"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M10 2v16M2 10h16"
-                  />
-                </svg>
-              </div>
-              <span className="text-base font-bold tracking-tight text-[#0F1717]">
-                NakesPro
-              </span>
+            <div className="lg:hidden mb-8">
+              <Image
+                src="/nakespro-logo.webp"
+                alt="NakesPro.id"
+                width={140}
+                height={35}
+                className="h-auto w-auto"
+              />
             </div>
 
             <h2 className="text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-tight text-[#0F1717] mb-2">
